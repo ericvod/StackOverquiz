@@ -679,7 +679,7 @@
               '<span style="font-size:18px;font-weight:700;min-width:28px;color:var(--accent)">#' +
               escapeHtml(entry.rank) +
               "</span>" +
-              "<div style=\"flex:1\">" +
+              '<div style="flex:1">' +
               "<strong>" +
               escapeHtml(entry.user.username) +
               "</strong>" +
@@ -743,7 +743,7 @@
       }
       container.innerHTML =
         '<div class="stack">' +
-        "<div><strong>Key:</strong> <code style=\"font-family:monospace;font-size:11px;word-break:break-all;\">" +
+        '<div><strong>Key:</strong> <code style="font-family:monospace;font-size:11px;word-break:break-all;">' +
         escapeHtml(data.key) +
         "</code></div>" +
         (data.url
@@ -783,8 +783,7 @@
         return;
       }
       const p = data;
-      const accuracy =
-        p.stats?.accuracy != null ? (p.stats.accuracy * 100).toFixed(1) + "%" : "—";
+      const accuracy = p.stats?.accuracy != null ? (p.stats.accuracy * 100).toFixed(1) + "%" : "—";
       const since = p.createdAt ? new Date(p.createdAt).toLocaleDateString("pt-BR") : "—";
       container.innerHTML =
         '<article class="detail-card">' +
@@ -877,7 +876,7 @@
           (u) =>
             '<article class="resource-card" style="margin-bottom:6px;">' +
             '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">' +
-            '<div>' +
+            "<div>" +
             '<div style="font-weight:600;font-size:13px;">' +
             escapeHtml(u.username) +
             " " +

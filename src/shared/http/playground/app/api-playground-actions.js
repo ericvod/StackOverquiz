@@ -519,10 +519,7 @@
       const { response, payload } = await callApi(`/admin/users${qs}`, { auth: true });
       if (response.ok && payload?.data) {
         if (typeof deps.renderAdminUserList === "function") deps.renderAdminUserList(payload.data);
-        updateLatestResult(
-          "Usuários carregados",
-          `${payload.data.total} usuário(s) encontrado(s).`,
-        );
+        updateLatestResult("Usuários carregados", `${payload.data.total} usuário(s) encontrado(s).`);
       }
     }
 
@@ -544,9 +541,7 @@
 
       if (response.ok && payload?.data) {
         const d = payload.data;
-        const label = d.generated
-          ? "Senha gerada automaticamente (mostrada apenas uma vez):"
-          : "Senha aplicada:";
+        const label = d.generated ? "Senha gerada automaticamente (mostrada apenas uma vez):" : "Senha aplicada:";
         if (resultEl) {
           resultEl.innerHTML =
             '<div class="stack">' +
@@ -570,15 +565,10 @@
         }
         const pwEl = document.getElementById("adminResetNewPassword");
         if (pwEl) pwEl.value = "";
-        updateLatestResult(
-          "Senha resetada",
-          `Senha ${d.generated ? "gerada" : "definida"} para o usuário ${userId}.`,
-        );
+        updateLatestResult("Senha resetada", `Senha ${d.generated ? "gerada" : "definida"} para o usuário ${userId}.`);
       } else if (resultEl) {
         resultEl.innerHTML =
-          '<div class="status error">' +
-          escapeHtml(payload?.error?.message ?? "Erro ao resetar senha.") +
-          "</div>";
+          '<div class="status error">' + escapeHtml(payload?.error?.message ?? "Erro ao resetar senha.") + "</div>";
       }
     }
 

@@ -7,12 +7,7 @@ import { paginate, paginatedResponse } from "../../shared/pagination";
  * Returns a paginated list of all users, optionally filtered by search term or role.
  * Intended for admin use only — includes email addresses.
  */
-export async function listUsers(opts: {
-  search?: string;
-  role?: "user" | "admin";
-  page?: number;
-  limit?: number;
-}) {
+export async function listUsers(opts: { search?: string; role?: "user" | "admin"; page?: number; limit?: number }) {
   const { page, limit, offset } = paginate({ page: opts.page, limit: opts.limit });
 
   const conditions = [];

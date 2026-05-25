@@ -228,6 +228,209 @@ bun run admin:create -- --email usuario_existente@example.com
 - [ ] /v1/admin/content/* (reviews de questions/quizzes)
 - [ ] /v1/practice/* (questions flow e answer)
 
+## Deploy no GCP
+
+### Pre-requisitos
+
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install) instalado e autenticado
+- Docker instalado e rodando
+- Terraform >= 1.6.0 instalado
+- Projeto GCP criado com billing ativo
+- Permissoes de Owner ou Editor no projeto GCP
+
+### Primeira vez — infraestrutura nova
+
+#### 1. Configurar variaveis do Terraform
+
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+```
+
+Editar `terraform.tfvars` com os valores do projeto:
+
+```hcl
+project_id  = "SEU_PROJECT_ID"
+region      = "us-central1"
+environment = "staging"
+image_tag   = "v1.0.0"
+```
+
+#### 2. Autenticar e inicializar
+
+```bash
+gcloud auth application-default login
+terraform init
+```
+
+#### 3. Provisionar APIs e Artifact Registry primeiro
+
+Em um projeto novo, o repositorio Docker precisa existir antes de o Cloud Run
+tentar referenciar uma imagem:
+
+```bash
+terraform apply \
+  -target=google_project_service.apis \
+  -target=google_artifact_registry_repository.api
+```
+
+Confirme com `yes` quando solicitado.
+
+#### 4. Build e push da imagem
+
+Substituir `SEU_PROJECT_ID` e a tag desejada:
+
+```bash
+cd ..
+
+# Autenticar Docker no Artifact Registry
+gcloud auth configure-docker us-central1-docker.pkg.dev
+
+# Build da imagem de producao
+docker build -t us-central1-docker.pkg.dev/SEU_PROJECT_ID/stackoverquiz-api/api:v1.0.0 .
+
+# Push para o Artifact Registry
+docker push us-central1-docker.pkg.dev/SEU_PROJECT_ID/stackoverquiz-api/api:v1.0.0
+```
+
+#### 5. Aplicar infraestrutura completa
+
+```bash
+cd terraform
+terraform apply
+```
+
+O Terraform vai criar e configurar:
+
+- Cloud SQL PostgreSQL com senha gerada automaticamente
+- JWT_SECRET gerado e armazenado no Secret Manager
+- Cloud Storage com acesso privado (signed URLs)
+- Cloud Run apontando para a imagem recem enviada
+- Service account com IAM minimo necessario
+
+Ao final, o output `cloud_run_url` exibe a URL publica da API.
+
+#### 6. Verificar o deploy
+
+```bash
+curl https://SEU_CLOUD_RUN_URL/health
+```
+
+Resposta esperada com `"status": "ok"` e dependencias `database` e `storage` saudaveis.
+Migracoes rodam automaticamente na inicializacao do container (`db:migrate:prod && start`).
+
+#### 7. Criar o primeiro admin
+
+O Terraform nao cria usuarios. Para o primeiro acesso ao playground:
+
+```bash
+gcloud run jobs create create-admin \
+  --image us-central1-docker.pkg.dev/SEU_PROJECT_ID/stackoverquiz-api/api:v1.0.0 \
+  --region us-central1 \
+  --set-cloudsql-instances SEU_PROJECT_ID:us-central1:staging-stackoverquiz-postgres \
+  --set-secrets DATABASE_URL=staging-stackoverquiz-database-url:latest \
+  --set-env-vars DATABASE_SOCKET_PATH=/cloudsql/SEU_PROJECT_ID:us-central1:staging-stackoverquiz-postgres \
+  --set-env-vars NODE_ENV=production \
+  --command "bun" \
+  --args "run,admin:create,--,--email,admin@example.com,--username,admin,--password,senha-forte-aqui" \
+  --service-account staging-stackoverquiz-run@SEU_PROJECT_ID.iam.gserviceaccount.com
+
+gcloud run jobs execute create-admin --region us-central1 --wait
+```
+
+Apos confirmar a criacao, remover o job:
+
+```bash
+gcloud run jobs delete create-admin --region us-central1
+```
+
+### Secrets opcionais
+
+Gemini, Google OAuth e GitHub OAuth nao sao gerenciados pelo Terraform.
+Para habilitar cada um, adicionar o secret no Secret Manager e expor no Cloud Run:
+
+#### Gemini API
+
+```bash
+echo -n "SUA_GEMINI_KEY" | \
+  gcloud secrets create staging-stackoverquiz-gemini-key \
+    --data-file=- --replication-policy=automatic
+
+gcloud secrets add-iam-policy-binding staging-stackoverquiz-gemini-key \
+  --member="serviceAccount:staging-stackoverquiz-run@SEU_PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/secretmanager.secretAccessor"
+
+gcloud run services update stackoverquiz-api \
+  --region us-central1 \
+  --update-secrets GEMINI_API_KEY=staging-stackoverquiz-gemini-key:latest
+```
+
+#### Google OAuth
+
+```bash
+echo -n "SEU_GOOGLE_CLIENT_SECRET" | \
+  gcloud secrets create staging-stackoverquiz-google-client-secret \
+    --data-file=- --replication-policy=automatic
+
+gcloud secrets add-iam-policy-binding staging-stackoverquiz-google-client-secret \
+  --member="serviceAccount:staging-stackoverquiz-run@SEU_PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/secretmanager.secretAccessor"
+
+gcloud run services update stackoverquiz-api \
+  --region us-central1 \
+  --update-secrets GOOGLE_CLIENT_SECRET=staging-stackoverquiz-google-client-secret:latest
+```
+
+Repetir o mesmo padrao para `GITHUB_CLIENT_SECRET`.
+
+---
+
+### Deploys subsequentes
+
+Para cada nova versao, apenas o build, push e atualizacao da tag sao necessarios:
+
+```bash
+# 1. Build e push com nova tag
+docker build -t us-central1-docker.pkg.dev/SEU_PROJECT_ID/stackoverquiz-api/api:v1.1.0 .
+docker push us-central1-docker.pkg.dev/SEU_PROJECT_ID/stackoverquiz-api/api:v1.1.0
+
+# 2. Atualizar a tag no tfvars
+# Editar terraform/terraform.tfvars: image_tag = "v1.1.0"
+
+# 3. Aplicar
+cd terraform
+terraform apply
+```
+
+O Cloud Run cria uma nova revisao automaticamente. Migracoes rodam na
+inicializacao do novo container antes de a API comecar a servir trafego.
+
+### Obter a URL do servico a qualquer momento
+
+```bash
+terraform output cloud_run_url
+```
+
+Ou diretamente pelo gcloud:
+
+```bash
+gcloud run services describe stackoverquiz-api \
+  --region us-central1 \
+  --format="value(status.url)"
+```
+
+### Destruir o ambiente
+
+```bash
+cd terraform
+terraform destroy
+```
+
+Atencao: `deletion_protection = false` no tfvars de staging permite que o Terraform
+remova o Cloud SQL. Para producao, manter `deletion_protection = true`.
+
+---
+
 ## Riscos conhecidos
 
 - leaderboard de quiz ainda nao deduplica melhor tentativa por usuario

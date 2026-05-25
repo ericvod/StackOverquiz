@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StackOverquiz API Playground</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=IBM+Plex+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/playground/assets/api-playground.css" />
+  </head>
+  <body data-theme="light">
+    <main class="shell">
+
+      <header class="app-bar">
+        <div class="brand-group">
+          <div class="brand-mark">SQ</div>
+          <div class="brand-copy">
+            <p class="eyebrow">Admin Workbench</p>
+            <h1>API Playground</h1>
+          </div>
+        </div>
+
+        <div class="app-bar-center">
+          <div class="status-panel">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="globalStatus" class="status">Pronto.</span>
+          </div>
+        </div>
+
+        <div class="app-bar-actions">
+          <button type="button" id="healthBtn" class="secondary compact-button">Health</button>
+          <button type="button" id="meBtn" class="secondary compact-button">Me</button>
+          <button type="button" id="bootstrapBtn" class="compact-button">Atualizar</button>
+          <a href="/swagger" target="_blank" class="swagger-link">Swagger ↗</a>
+          <button type="button" id="configBtn" class="secondary compact-button" aria-label="Configurações">⚙</button>
+          <button type="button" id="inspectorToggleBtn" class="secondary compact-button" aria-label="Alternar inspector">◧</button>
+          <button type="button" id="themeToggleBtn" class="secondary compact-button">Tema</button>
+          <button type="button" id="exitPlaygroundBtn" class="secondary compact-button">Sair</button>
+        </div>
+      </header>
+
+      <div class="content-layout">
+
+        <aside class="sidebar" id="sidebar">
+          <button type="button" id="sidebarToggleBtn" class="sidebar-collapse-btn secondary compact-button" aria-label="Recolher sidebar">‹</button>
+
+          <nav class="tab-rail" aria-label="Navegação principal">
+            <button type="button" class="tab-button active" data-tab="dashboard">
+              <span class="tab-icon">◈</span>
+              <span class="tab-copy">
+                <strong>Dashboard</strong>
+                <small>Visão geral</small>
+              </span>
+              <span class="tab-index">01</span>
+            </button>
+            <button type="button" class="tab-button" data-tab="questions">
+              <span class="tab-icon">?</span>
+              <span class="tab-copy">
+                <strong>Perguntas</strong>
+                <small>Filtro e criação</small>
+              </span>
+              <span class="tab-index">02</span>
+            </button>
+            <button type="button" class="tab-button" data-tab="quizzes">
+              <span class="tab-icon">▶</span>
+              <span class="tab-copy">
+                <strong>Quizzes</strong>
+                <small>Runner e tentativa</small>
+              </span>
+              <span class="tab-index">03</span>
+            </button>
+            <button type="button" class="tab-button" data-tab="practice">
+              <span class="tab-icon">✎</span>
+              <span class="tab-copy">
+                <strong>Prática</strong>
+                <small>Modo livre</small>
+              </span>
+              <span class="tab-index">04</span>
+            </button>
+            <button type="button" class="tab-button" data-tab="admin">
+              <span class="tab-icon">⚙</span>
+              <span class="tab-copy">
+                <strong>Admin</strong>
+                <small>IA · Revisão · Categorias</small>
+              </span>
+              <span class="tab-index">05</span>
+            </button>
+          </nav>
+
+          <div class="sidebar-session" id="sessionChip">
+            <div class="session-avatar" aria-hidden="true">—</div>
+            <div id="currentUserSummary" class="session-info">
+              <span class="session-name">Não autenticado</span>
+            </div>
+            <button type="button" id="sessionDetailsBtn" class="secondary compact-button" aria-label="Detalhes da sessão">⋯</button>
+          </div>
+        </aside>
+
+        <section class="workspace">
+          <header class="workspace-head">
+            <div>
+              <p class="eyebrow">Fluxo ativo</p>
+              <h2 id="activeTabLabel" class="workspace-title">Dashboard</h2>
+            </div>
+            <p id="activeTabSummary" class="workspace-summary">Visão rápida de dados, saúde e atalhos.</p>
+          </header>
+
+          <div class="workspace-body">
+
+            <!-- Dashboard -->
+            <section class="tab-panel active" data-panel="dashboard">
+              <div class="stats">
+                <article class="stat">
+                  <span class="section-title">Categorias</span>
+                  <span class="value" id="dashboardCategoryCount">0</span>
+                </article>
+                <article class="stat">
+                  <span class="section-title">Perguntas públicas</span>
+                  <span class="value" id="dashboardQuestionCount">0</span>
+                </article>
+                <article class="stat">
+                  <span class="section-title">Quizzes públicos</span>
+                  <span class="value" id="dashboardQuizCount">0</span>
+                </article>
+                <article class="stat">
+                  <span class="section-title">Seleção para quiz</span>
+                  <span class="value" id="dashboardSelectionCount">0</span>
+                </article>
+              </div>
+
+              <div class="split" style="margin-top: 18px;">
+                <article class="card action-card">
+                  <h2>Teste rápido</h2>
+                  <div class="actions">
+                    <button type="button" id="dashboardLoadCategoriesBtn">Categorias</button>
+                    <button type="button" id="dashboardLoadQuestionsBtn" class="secondary">Perguntas</button>
+                    <button type="button" id="dashboardLoadQuizzesBtn" class="secondary">Quizzes</button>
+                    <button type="button" id="dashboardOpenRunnerBtn" class="warning">Abrir runner</button>
+                  </div>
+                </article>
+                <article class="card state-card">
+                  <h2>Estado atual</h2>
+                  <div id="dashboardState" class="hint">
+                    Nenhuma informação carregada ainda.
+                  </div>
+                </article>
+              </div>
+
+              <div class="split" style="margin-top: 18px;">
+                <article class="card">
+                  <h2>Leaderboard Global</h2>
+                  <label style="margin-top: 10px;">
+                    Limit
+                    <input id="leaderboardLimit" type="number" min="1" max="100" value="10" style="width: 80px;" />
+                  </label>
+                  <div class="actions" style="margin-top: 12px;">
+                    <button type="button" id="loadLeaderboardBtn">Carregar ranking</button>
+                  </div>
+                </article>
+                <article class="card">
+                  <h2>Ranking</h2>
+                  <div id="leaderboardList" class="resource-list">
+                    <div class="empty">Clique em "Carregar ranking".</div>
+                  </div>
+                </article>
+              </div>
+
+              <div class="split" style="margin-top: 18px;">
+                <article class="card">
+                  <h2>Upload de imagem</h2>
+                  <div class="grid two" style="margin-top: 10px;">
+                    <label>
+                      Arquivo (JPEG · PNG · WebP · GIF — max 5 MB)
+                      <input type="file" id="uploadImageFile" accept="image/jpeg,image/png,image/webp,image/gif" />
+                    </label>
+                    <label>
+                      Folder
+                      <select id="uploadImageFolder">
+                        <option value="questions">questions</option>
+                        <option value="avatars">avatars</option>
+                        <option value="quizzes">quizzes</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="actions" style="margin-top: 12px;">
+                    <button type="button" id="uploadImageBtn">Enviar imagem</button>
+                  </div>
+                  <div id="uploadResult" class="empty" style="margin-top: 14px;">Nenhum upload realizado.</div>
+                  <div style="margin: 16px 0; border-top: 1px solid var(--border);"></div>
+                  <label>
+                    Buscar URL assinada por chave
+                    <input id="signedUrlKey" placeholder="uuid/filename.jpg" />
+                  </label>
+                  <div class="actions" style="margin-top: 10px;">
+                    <button type="button" id="getSignedUrlBtn" class="secondary">Buscar URL</button>
+                  </div>
+                  <div id="signedUrlResult" class="empty" style="margin-top: 10px;">Nenhuma chave consultada.</div>
+                </article>
+                <article class="card">
+                  <h2>Perfil de Usuário</h2>
+                  <label style="margin-top: 10px;">
+                    User UUID
+                    <input id="lookupUserId" placeholder="UUID do usuário" />
+                  </label>
+                  <div class="actions" style="margin-top: 12px;">
+                    <button type="button" id="lookupUserProfileBtn">Carregar perfil</button>
+                    <button type="button" id="lookupUserHistoryBtn" class="secondary">Histórico</button>
+                  </div>
+                  <div id="userProfileResult" class="empty" style="margin-top: 14px;">Nenhum perfil carregado.</div>
+                </article>
+              </div>
+            </section>
+
+            <!-- Perguntas -->
+            <section class="tab-panel" data-panel="questions">
+              <div class="stack">
+                <article class="card">
+                  <h2>Explorar perguntas</h2>
+                  <div class="grid three">
+                    <label>
+                      Search
+                      <input id="questionSearch" placeholder="javascript, arrays, async..." />
+                    </label>
+                    <label>
+                      Difficulty
+                      <select id="questionDifficulty">
+                        <option value="">Todas</option>
+                        <option value="beginner">beginner</option>
+                        <option value="easy">easy</option>
+                        <option value="medium">medium</option>
+                        <option value="hard">hard</option>
+                        <option value="expert">expert</option>
+                      </select>
+                    </label>
+                    <label>
+                      Category
+                      <select id="questionCategoryFilter">
+                        <option value="">Todas</option>
+                      </select>
+                    </label>
+                  </div>
+                  <label class="checklist-item" style="margin-top: 12px;">
+                    <input type="checkbox" id="questionAuthorMe" />
+                    <span>Apenas as minhas (<code>?author=me</code>)</span>
+                  </label>
+                  <div class="actions" style="margin-top: 10px;">
+                    <button type="button" id="loadCategoriesBtn" class="secondary">Categorias</button>
+                    <button type="button" id="loadQuestionsBtn">Listar perguntas</button>
+                    <button type="button" id="openCreateQuestionModalBtn" class="secondary">Nova pergunta ↗</button>
+                  </div>
+                </article>
+                <article class="card">
+                  <h2>Perguntas públicas</h2>
+                  <div id="questionList" class="resource-list">
+                    <div class="empty">Nenhuma pergunta carregada ainda.</div>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <!-- Quizzes -->
+            <section class="tab-panel" data-panel="quizzes">
+              <div class="stack">
+                <article class="card">
+                  <h2>Explorar quizzes</h2>
+                  <label>
+                    Search
+                    <input id="quizSearch" placeholder="Procure por título..." />
+                  </label>
+                  <label class="checklist-item" style="margin-top: 12px;">
+                    <input type="checkbox" id="quizAuthorMe" />
+                    <span>Apenas os meus (<code>?author=me</code>)</span>
+                  </label>
+                  <div class="actions" style="margin-top: 10px;">
+                    <button type="button" id="loadQuizzesBtn">Listar quizzes</button>
+                    <button type="button" id="openCreateQuizModalBtn" class="secondary">Criar quiz ↗</button>
+                  </div>
+                </article>
+                <article class="card">
+                  <h2>Quizzes públicos</h2>
+                  <div id="quizList" class="resource-list">
+                    <div class="empty">Nenhum quiz carregado ainda.</div>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <!-- Prática -->
+            <section class="tab-panel" data-panel="practice">
+              <div class="split">
+                <div class="stack">
+                  <article class="card">
+                    <h2>Modo Livre (Lote Aleatório)</h2>
+                    <div class="grid three">
+                      <label>
+                        Limit
+                        <input id="practiceLimit" type="number" min="1" max="50" value="10" />
+                      </label>
+                      <label>
+                        Difficulty
+                        <select id="practiceDifficulty">
+                          <option value="">Qualquer</option>
+                          <option value="beginner">beginner</option>
+                          <option value="easy">easy</option>
+                          <option value="medium">medium</option>
+                          <option value="hard">hard</option>
+                          <option value="expert">expert</option>
+                        </select>
+                      </label>
+                      <label>
+                        Category
+                        <select id="practiceCategorySelect">
+                          <option value="">Todas</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div class="grid two" style="margin-top: 12px;">
+                      <label>
+                        Exclude Answered
+                        <select id="practiceExcludeAnswered">
+                          <option value="false">false</option>
+                          <option value="true">true</option>
+                        </select>
+                      </label>
+                      <label>
+                        Include Answered
+                        <select id="practiceIncludeAnswered">
+                          <option value="false">false</option>
+                          <option value="true">true</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div class="actions" style="margin-top: 14px;">
+                      <button type="button" id="loadPracticeQuestionsBtn">Processar Lote Livre</button>
+                    </div>
+                  </article>
+                  <article class="card">
+                    <h2>Resultado da Resposta</h2>
+                    <div id="practiceResult" class="empty">Resposta não submetida ainda.</div>
+                  </article>
+                </div>
+                <div class="stack">
+                  <article class="card">
+                    <h2>Lote (Responder)</h2>
+                    <div id="practiceQuestionsList" class="resource-list">
+                      <div class="empty">Nenhum lote processado ainda.</div>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </section>
+
+            <!-- Admin (IA · Revisão · Categorias) -->
+            <section class="tab-panel" data-panel="admin">
+              <div class="sub-tab-rail" role="tablist" aria-label="Admin">
+                <button type="button" class="sub-tab active" data-admin-tab="ai" role="tab">IA</button>
+                <button type="button" class="sub-tab" data-admin-tab="review" role="tab">Revisão</button>
+                <button type="button" class="sub-tab" data-admin-tab="categories" role="tab">Categorias</button>
+                <button type="button" class="sub-tab" data-admin-tab="users" role="tab">Usuários</button>
+              </div>
+
+              <!-- IA -->
+              <div class="admin-sub-panel active" data-admin-panel="ai">
+                <div class="split">
+                  <article class="card">
+                    <h2>Gerar com IA</h2>
+                    <div class="grid two" style="margin-top: 12px;">
+                      <label>
+                        Tema
+                        <input id="aiCategory" placeholder="React, SQL, TypeScript..." />
+                      </label>
+                      <label>
+                        Difficulty
+                        <select id="aiDifficulty">
+                          <option value="beginner">beginner</option>
+                          <option value="easy">easy</option>
+                          <option value="medium">medium</option>
+                          <option value="hard">hard</option>
+                          <option value="expert">expert</option>
+                        </select>
+                      </label>
+                      <label>
+                        Count
+                        <input id="aiCount" type="number" min="1" max="20" value="3" />
+                      </label>
+                      <label>
+                        Language
+                        <select id="aiLanguage">
+                          <option value="pt-BR">pt-BR</option>
+                          <option value="en">en</option>
+                        </select>
+                      </label>
+                    </div>
+                    <label style="margin-top: 12px;">
+                      Category IDs
+                      <select id="aiCategoryIds" multiple></select>
+                    </label>
+                    <div class="actions" style="margin-top: 14px;">
+                      <button type="button" id="generateAiBtn" class="warning">Gerar questões</button>
+                    </div>
+                  </article>
+
+                  <article class="card">
+                    <h2>Gerar Quiz Completo (IA)</h2>
+                    <div class="grid two" style="margin-top: 12px;">
+                      <label>
+                        Título
+                        <input id="aiQuizTitle" placeholder="Quiz de Inovação..." />
+                      </label>
+                      <label>
+                        Descrição
+                        <input id="aiQuizDescription" placeholder="Opcional" />
+                      </label>
+                      <label>
+                        Tema
+                        <input id="aiQuizCategory" placeholder="Agile, DevOps..." />
+                      </label>
+                      <label>
+                        Language
+                        <select id="aiQuizLanguage">
+                          <option value="pt-BR">pt-BR</option>
+                          <option value="en">en</option>
+                        </select>
+                      </label>
+                    </div>
+                    <strong style="display: block; margin-top: 16px;">Difficulty Mix</strong>
+                    <div class="grid three" style="margin-top: 8px;">
+                      <label>Beginner <input id="aiQuizMixBeginner" type="number" min="0" max="10" value="0" /></label>
+                      <label>Easy <input id="aiQuizMixEasy" type="number" min="0" max="10" value="2" /></label>
+                      <label>Medium <input id="aiQuizMixMedium" type="number" min="0" max="10" value="2" /></label>
+                      <label>Hard <input id="aiQuizMixHard" type="number" min="0" max="10" value="1" /></label>
+                      <label>Expert <input id="aiQuizMixExpert" type="number" min="0" max="10" value="0" /></label>
+                    </div>
+                    <label style="margin-top: 12px;">
+                      Category IDs
+                      <select id="aiQuizCategoryIds" multiple></select>
+                    </label>
+                    <div class="actions" style="margin-top: 14px;">
+                      <button type="button" id="generateAiQuizBtn" class="warning">Gerar quiz draft</button>
+                    </div>
+                  </article>
+
+                  <article class="card">
+                    <h2>Resultado</h2>
+                    <div id="adminResult" class="empty">Nenhuma ação admin executada ainda.</div>
+                  </article>
+                </div>
+              </div>
+
+              <!-- Revisão -->
+              <div class="admin-sub-panel" data-admin-panel="review" hidden>
+                <div class="split">
+                  <article class="card">
+                    <div class="card-heading">
+                      <h2>Perguntas Pendentes</h2>
+                    </div>
+                    <div class="actions">
+                      <button type="button" id="loadPendingQuestionsBtn">Carregar perguntas</button>
+                    </div>
+                    <div id="pendingQuestionsList" class="resource-list" style="margin-top: 16px;">
+                      <div class="empty">Nenhuma pergunta pendente carregada.</div>
+                    </div>
+                  </article>
+                  <div class="stack">
+                    <article class="card">
+                      <div class="card-heading">
+                        <h2>Quizzes Pendentes</h2>
+                      </div>
+                      <div class="actions">
+                        <button type="button" id="loadPendingQuizzesBtn">Carregar quizzes</button>
+                      </div>
+                      <div id="pendingQuizzesList" class="resource-list" style="margin-top: 16px;">
+                        <div class="empty">Nenhum quiz pendente carregado.</div>
+                      </div>
+                    </article>
+                    <article class="card">
+                      <h2>Resultado da Revisão</h2>
+                      <div id="reviewResult" class="empty">Nenhuma ação de revisão executada.</div>
+                    </article>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Categorias -->
+              <div class="admin-sub-panel" data-admin-panel="categories" hidden>
+                <div class="stack">
+                  <article class="card">
+                    <div class="card-heading">
+                      <h2>Lista de categorias</h2>
+                      <span class="mini-chip">admin</span>
+                    </div>
+                    <div class="actions">
+                      <button type="button" id="loadAdminCategoriesBtn">Carregar lista</button>
+                      <button type="button" id="openCreateCategoryModalBtn" class="secondary">Nova categoria ↗</button>
+                    </div>
+                    <div id="categoryAdminList" class="resource-list" style="margin-top: 14px;">
+                      <div class="empty">Clique em "Carregar lista" para ver as categorias existentes.</div>
+                    </div>
+                  </article>
+                  <article class="card">
+                    <h2>Resultado</h2>
+                    <div id="categoryAdminResult" class="empty">Nenhuma ação de categorias executada ainda.</div>
+                  </article>
+                </div>
+              </div>
+
+              <!-- Usuários -->
+              <div class="admin-sub-panel" data-admin-panel="users" hidden>
+                <div class="split">
+                  <div class="stack">
+                    <article class="card">
+                      <div class="card-heading">
+                        <h2>Listar usuários</h2>
+                        <span class="mini-chip">admin</span>
+                      </div>
+                      <div class="grid two" style="margin-top: 12px;">
+                        <label>
+                          Busca (username ou email)
+                          <input id="adminUserSearch" placeholder="ana, @example.com..." />
+                        </label>
+                        <label>
+                          Role
+                          <select id="adminUserRoleFilter">
+                            <option value="">Todos</option>
+                            <option value="user">user</option>
+                            <option value="admin">admin</option>
+                          </select>
+                        </label>
+                      </div>
+                      <div class="actions" style="margin-top: 12px;">
+                        <button type="button" id="loadAdminUsersBtn">Buscar usuários</button>
+                      </div>
+                      <div id="adminUserList" class="resource-list" style="margin-top: 14px;">
+                        <div class="empty">Clique em "Buscar usuários" para listar.</div>
+                      </div>
+                    </article>
+                  </div>
+
+                  <div class="stack">
+                    <article class="card">
+                      <div class="card-heading">
+                        <h2>Reset de senha</h2>
+                        <span class="mini-chip">admin</span>
+                      </div>
+                      <p class="hint" style="margin-top: 10px;">
+                        Redefine a senha de qualquer conta. Todas as sessões do alvo são revogadas.
+                        Clique em "Usar UUID" na lista para preencher automaticamente.
+                      </p>
+                      <div class="grid two" style="margin-top: 14px;">
+                        <label>
+                          User UUID
+                          <input id="adminResetUserId" placeholder="UUID do usuário alvo" />
+                        </label>
+                        <label>
+                          Nova senha (opcional)
+                          <input type="password" id="adminResetNewPassword" autocomplete="new-password" placeholder="Vazio = gerar automaticamente" />
+                        </label>
+                      </div>
+                      <div class="actions" style="margin-top: 14px;">
+                        <button type="button" id="adminResetPasswordBtn" class="warning">Resetar senha</button>
+                      </div>
+                    </article>
+                    <article class="card">
+                      <h2>Resultado</h2>
+                      <div id="adminUsersResult" class="empty">Nenhuma ação de usuários executada ainda.</div>
+                    </article>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </section>
+
+        <!-- Inspector drawer (toggle via header button) -->
+        <aside class="inspector-drawer" id="inspectorDrawer" hidden>
+          <div class="inspector-head">
+            <p class="eyebrow">Inspector</p>
+            <h2>Resultado e rede</h2>
+          </div>
+
+          <article class="card result-card">
+            <div class="card-heading">
+              <h2>Último resultado</h2>
+              <span class="mini-chip">fluxo</span>
+            </div>
+            <div id="latestResultSummary" class="empty">Nenhum fluxo executado ainda.</div>
+          </article>
+
+          <article class="card console-card">
+            <div class="console-toolbar">
+              <div class="toolbar">
+                <span class="pill">Rede</span>
+                <span id="requestStatus" class="status">Aguardando request.</span>
+              </div>
+            </div>
+            <div class="console-tab-rail" role="tablist" aria-label="Console">
+              <button type="button" class="console-tab active" data-console-tab="history" role="tab" aria-selected="true">Histórico</button>
+              <button type="button" class="console-tab" data-console-tab="request" role="tab" aria-selected="false">Request</button>
+              <button type="button" class="console-tab" data-console-tab="headers" role="tab" aria-selected="false">Headers</button>
+              <button type="button" class="console-tab" data-console-tab="response" role="tab" aria-selected="false">Response</button>
+            </div>
+            <section class="console-panel active" data-console-panel="history">
+              <div id="historyList" class="history-list">
+                <div class="empty">Nenhuma request ainda.</div>
+              </div>
+            </section>
+            <section class="console-panel" data-console-panel="request" hidden>
+              <pre id="requestPreview">Nenhuma request enviada ainda.</pre>
+            </section>
+            <section class="console-panel" data-console-panel="headers" hidden>
+              <pre id="headersPreview">Nenhum header recebido ainda.</pre>
+            </section>
+            <section class="console-panel" data-console-panel="response" hidden>
+              <pre id="responsePreview">Nenhuma response recebida ainda.</pre>
+            </section>
+          </article>
+        </aside>
+
+      </div>
+    </main>
+
+    <!-- Floating selection bar -->
+    <div class="selection-bar" id="selectionBar" hidden>
+      <span id="selectedQuestionsSummary" class="selection-bar-text">0 perguntas selecionadas</span>
+      <div class="selection-bar-actions">
+        <button type="button" id="clearSelectionBtn" class="secondary compact-button">Limpar</button>
+        <button type="button" id="openCreateQuizModalBtn2" class="compact-button">Criar quiz ↗</button>
+      </div>
+    </div>
+
+    <!-- Modal overlay -->
+    <div id="playgroundModalOverlay" class="modal-overlay" hidden aria-hidden="true" role="dialog" aria-labelledby="playgroundModalTitle">
+      <div class="modal-backdrop"></div>
+      <div class="modal-container">
+        <div class="modal-header">
+          <h2 id="playgroundModalTitle" class="modal-title"></h2>
+          <button type="button" id="playgroundModalCloseBtn" class="secondary compact-button">✕</button>
+        </div>
+        <div id="playgroundModalBody" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Modal templates (hidden until teleported into overlay) -->
+    <div id="modalTemplates" hidden aria-hidden="true">
+
+      <div id="questionDetailTemplate">
+        <div id="questionDetail" class="empty">
+          Clique em "Abrir detalhe" em uma pergunta para inspecionar corpo e opções.
+        </div>
+      </div>
+
+      <div id="createQuestionTemplate">
+        <div class="stack">
+          <div class="grid two">
+            <label>Title <input id="createQuestionTitle" placeholder="Qual é a saída deste código?" /></label>
+            <label>
+              Difficulty
+              <select id="createQuestionDifficulty">
+                <option value="beginner">beginner</option>
+                <option value="easy">easy</option>
+                <option value="medium">medium</option>
+                <option value="hard">hard</option>
+                <option value="expert">expert</option>
+              </select>
+            </label>
+            <label>Tempo estimado (s) <input id="createQuestionEstimatedTimeSeconds" type="number" min="15" max="900" value="60" /></label>
+          </div>
+          <label>Body <textarea id="createQuestionBody" placeholder="Explique o enunciado da questão."></textarea></label>
+          <label>Explanation <textarea id="createQuestionExplanation" placeholder="Explicação da resposta correta."></textarea></label>
+          <label>Category IDs <select id="createQuestionCategories" multiple></select></label>
+          <div class="grid two">
+            <label>Option 1 <input id="option0" placeholder="Primeira opção" /></label>
+            <label>Option 2 <input id="option1" placeholder="Segunda opção" /></label>
+            <label>Option 3 <input id="option2" placeholder="Terceira opção" /></label>
+            <label>Option 4 <input id="option3" placeholder="Quarta opção" /></label>
+            <label>Option 5 <input id="option4" placeholder="Quinta opção" /></label>
+          </div>
+          <label>
+            Correct option
+            <select id="createQuestionCorrectIndex">
+              <option value="0">Option 1</option>
+              <option value="1">Option 2</option>
+              <option value="2">Option 3</option>
+              <option value="3">Option 4</option>
+              <option value="4">Option 5</option>
+            </select>
+          </label>
+          <div class="actions">
+            <button type="button" id="createQuestionBtn">Criar pergunta</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="quizRunnerTemplate">
+        <div id="quizRunner" class="empty">Abra um quiz da lista para responder aqui visualmente.</div>
+      </div>
+
+      <div id="createQuizTemplate">
+        <div class="stack">
+          <div class="grid two">
+            <label>Title <input id="createQuizTitle" placeholder="Quiz de JavaScript assíncrono" /></label>
+            <label>
+              Público
+              <select id="createQuizIsPublic">
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </label>
+          </div>
+          <label>Time limit (s) <input id="createQuizTimeLimit" type="number" min="30" placeholder="Sem limite" /></label>
+          <label>Description <textarea id="createQuizDescription" placeholder="Descrição opcional do quiz."></textarea></label>
+          <div id="createQuizSelectionSummary" class="hint">
+            Selecione perguntas na aba Questions para montar o quiz.
+          </div>
+          <div class="actions">
+            <button type="button" id="createQuizBtn">Criar quiz</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="pendingQuizDetailTemplate">
+        <div id="pendingQuizDetail" class="empty">
+          Selecione um quiz na lista para exibir o detalhe.
+        </div>
+      </div>
+
+      <div id="createCategoryTemplate">
+        <div class="stack">
+          <div class="grid two">
+            <label>Nome <input id="createCategoryName" placeholder="JavaScript" /></label>
+            <label>Slug <input id="createCategorySlug" placeholder="javascript" /></label>
+          </div>
+          <label>
+            Tipo
+            <select id="createCategoryType">
+              <option value="language">language</option>
+              <option value="framework">framework</option>
+              <option value="area">area</option>
+            </select>
+          </label>
+          <label>Ícone (emoji ou texto) <input id="createCategoryIcon" placeholder="🟨" /></label>
+          <label>Descrição <textarea id="createCategoryDescription" placeholder="Descrição opcional da categoria."></textarea></label>
+          <div class="actions">
+            <button type="button" id="adminCreateCategoryBtn">Criar categoria</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="editCategoryTemplate">
+        <div class="stack">
+          <input type="hidden" id="editCategoryId" value="" />
+          <div class="grid two">
+            <label>Nome <input id="editCategoryName" placeholder="Nome da categoria" /></label>
+            <label>Slug <input id="editCategorySlug" placeholder="slug-da-categoria" /></label>
+          </div>
+          <label>
+            Tipo
+            <select id="editCategoryType">
+              <option value="language">language</option>
+              <option value="framework">framework</option>
+              <option value="area">area</option>
+            </select>
+          </label>
+          <label>Ícone <input id="editCategoryIcon" placeholder="Ícone da categoria" /></label>
+          <label>Descrição <textarea id="editCategoryDescription" placeholder="Descrição da categoria"></textarea></label>
+          <div class="actions">
+            <button type="button" id="updateCategoryBtn">Salvar edição</button>
+            <button type="button" id="deleteCategoryBtn" class="warning">Excluir categoria</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="quizLeaderboardTemplate">
+        <div id="quizLeaderboardContent" class="empty">
+          Carregando leaderboard...
+        </div>
+      </div>
+
+      <div id="configTemplate">
+        <div class="stack">
+          <label>
+            Base URL da API
+            <input id="configBaseUrl" placeholder="/v1" />
+          </label>
+          <label>
+            Gemini API Key
+            <input id="configGeminiKey" type="password" autocomplete="off" placeholder="Salva localmente neste navegador" />
+          </label>
+          <div class="actions">
+            <button type="button" id="saveConfigBtn">Salvar</button>
+            <button type="button" id="clearGeminiKeyBtn" class="secondary">Limpar chave Gemini</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="sessionDetailsTemplate">
+        <div class="stack">
+          <div id="sessionDetailsUser" class="hint">Carregando...</div>
+
+          <div class="card" style="padding: 0;">
+            <div class="card-heading" style="padding: 14px 16px 10px;">
+              <h3 style="font-size: 13px; font-weight: 600;">Editar perfil</h3>
+            </div>
+            <div style="padding: 0 16px 14px;">
+              <div class="grid two">
+                <label>Username <input type="text" id="editProfileUsername" autocomplete="username" /></label>
+                <label>Avatar URL <input type="url" id="editProfileAvatarUrl" placeholder="https://..." /></label>
+              </div>
+              <div class="actions" style="margin-top: 10px;">
+                <button type="button" id="updateProfileBtn" class="secondary">Salvar perfil</button>
+              </div>
+              <div id="updateProfileResult" style="margin-top: 8px; font-size: 12px;"></div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0;">
+            <div class="card-heading" style="padding: 14px 16px 10px;">
+              <h3 style="font-size: 13px; font-weight: 600;">Trocar senha</h3>
+            </div>
+            <div style="padding: 0 16px 14px;">
+              <div class="grid two">
+                <label>Senha atual <input type="password" id="changePasswordCurrent" autocomplete="current-password" /></label>
+                <label>Nova senha <input type="password" id="changePasswordNew" autocomplete="new-password" /></label>
+              </div>
+              <div class="actions" style="margin-top: 10px;">
+                <button type="button" id="changePasswordBtn">Trocar senha</button>
+              </div>
+              <div id="changePasswordResult" style="margin-top: 8px; font-size: 12px;"></div>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0;">
+            <div class="card-heading" style="padding: 14px 16px 10px;">
+              <h3 style="font-size: 13px; font-weight: 600;">Tokens</h3>
+              <button type="button" id="toggleTokensBtn" class="secondary compact-button">Mostrar</button>
+            </div>
+            <div id="tokenFields" hidden style="padding: 0 16px 14px;">
+              <label style="margin-bottom: 10px;">
+                Access Token
+                <textarea id="accessToken" placeholder="Preenchido automaticamente." style="font-size: 11px; height: 64px;"></textarea>
+              </label>
+              <label>
+                Refresh Token
+                <textarea id="refreshToken" placeholder="Preenchido automaticamente." style="font-size: 11px; height: 64px;"></textarea>
+              </label>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="button" id="refreshSessionBtn" class="secondary">Renovar sessão</button>
+            <button type="button" id="logoutBtn" class="warning">Encerrar sessão</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="/playground/assets/api-playground-core.js"></script>
+    <script src="/playground/assets/api-playground-state.js"></script>
+    <script src="/playground/assets/api-playground-api-client.js"></script>
+    <script src="/playground/assets/api-playground-views.js"></script>
+    <script src="/playground/assets/api-playground-shell.js"></script>
+    <script src="/playground/assets/api-playground-navigation.js"></script>
+    <script src="/playground/assets/api-playground-actions.js"></script>
+    <script src="/playground/assets/api-playground-modal.js"></script>
+    <script src="/playground/assets/api-playground-events.js"></script>
+    <script src="/playground/assets/api-playground.js"></script>
+  </body>
+</html>

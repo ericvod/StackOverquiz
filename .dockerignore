@@ -1,0 +1,14 @@
+node_modules
+.git
+.github
+.codex
+.env
+.env.*
+!.env.example
+*.log
+coverage
+dist
+docs
+tests
+docker-compose*.yml
+terraform

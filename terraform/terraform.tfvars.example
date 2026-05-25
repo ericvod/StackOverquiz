@@ -1,0 +1,14 @@
+project_id  = "stackoverquiz"
+region      = "us-central1"
+environment = "staging"
+
+# Push this image before applying Cloud Run, or set container_image to an image
+# that already exists.
+image_tag = "staging"
+
+cors_origins = "*"
+
+# Keep staging cheap and compatible with the current in-memory OAuth state.
+database_edition   = "ENTERPRISE"
+database_tier      = "db-f1-micro"
+max_instance_count = 1

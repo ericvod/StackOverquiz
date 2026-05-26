@@ -55,8 +55,8 @@ describe("GET /playground", () => {
 
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toContain("text/html");
-    expect(html).toContain("Acesso administrativo ao playground");
-    expect(html).toContain("/playground/login-assets/api-playground-gateway-i18n.js");
+    expect(html).toContain("Acesso administrativo");
+    expect(html).toContain("/playground/shared-assets/api-playground-i18n.js");
     expect(html).toContain("/playground/login-assets/api-playground-login.css");
     expect(html).toContain("/playground/login-assets/api-playground-login.js");
   });

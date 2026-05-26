@@ -4,8 +4,9 @@
 
     function renderActiveTab() {
       const activeMeta = tabMeta[state.activeTab] || tabMeta.dashboard;
-      elements.activeTabLabel.textContent = activeMeta.label;
-      elements.activeTabSummary.textContent = activeMeta.summary;
+      const tFn = (key, fallback) => window.PlaygroundI18n?.t(key) ?? fallback;
+      elements.activeTabLabel.textContent = tFn(activeMeta.labelKey, activeMeta.label);
+      elements.activeTabSummary.textContent = tFn(activeMeta.summaryKey, activeMeta.summary);
     }
 
     function switchConsoleTab(tabName) {

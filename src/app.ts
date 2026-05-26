@@ -24,8 +24,8 @@ import {
   renderApiPlaygroundCss,
   renderApiPlaygroundEventsJs,
   renderApiPlaygroundForbiddenHtml,
-  renderApiPlaygroundGatewayI18nJs,
   renderApiPlaygroundHtml,
+  renderApiPlaygroundI18nJs,
   renderApiPlaygroundJs,
   renderApiPlaygroundLoginCss,
   renderApiPlaygroundLoginHtml,
@@ -112,9 +112,9 @@ export function createApp() {
     .use(jwtPlugin)
     .get("/docs", () => redirect("/swagger"), { detail: { hide: true } })
     .get(
-      "/playground/login-assets/api-playground-gateway-i18n.js",
+      "/playground/shared-assets/api-playground-i18n.js",
       () =>
-        new Response(renderApiPlaygroundGatewayI18nJs(), {
+        new Response(renderApiPlaygroundI18nJs(), {
           headers: {
             "content-type": "application/javascript; charset=utf-8",
           },

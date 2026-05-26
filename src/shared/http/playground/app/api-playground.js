@@ -146,7 +146,7 @@ function clearAuthState() {
   state.currentUser = null;
   renderCurrentUser();
   renderDashboard();
-  setGlobalStatus("Sessão local limpa.", false);
+  setGlobalStatus(window.PlaygroundI18n?.t("app.main.sessionCleared") ?? "Sessão local limpa.", false);
 }
 
 async function clearPlaygroundSessionCookie() {
@@ -465,6 +465,7 @@ async function bootstrap() {
   renderHistory();
   switchTab(state.activeTab);
   switchAdminSubTab(state.activeAdminSubTab);
+  window.PlaygroundI18n?.applyTranslations(document);
 
   document.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === "i") {

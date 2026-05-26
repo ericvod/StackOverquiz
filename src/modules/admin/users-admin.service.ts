@@ -2,6 +2,7 @@ import { and, count, desc, eq, ilike, or } from "drizzle-orm";
 import { db } from "../../config/database";
 import { users } from "../../db/schema";
 import { paginate, paginatedResponse } from "../../shared/pagination";
+import { toAdminUserItem } from "./users-admin.mapper";
 
 /**
  * Returns a paginated list of all users, optionally filtered by search term or role.
@@ -43,5 +44,5 @@ export async function listUsers(opts: { search?: string; role?: "user" | "admin"
     db.select({ total: count() }).from(users).where(where),
   ]);
 
-  return paginatedResponse(rows, Number(totals?.total ?? 0), page, limit);
+  return paginatedResponse(rows.map(toAdminUserItem), Number(totals?.total ?? 0), page, limit);
 }

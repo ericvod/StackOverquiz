@@ -19,73 +19,77 @@
         <div class="brand-group">
           <div class="brand-mark">SQ</div>
           <div class="brand-copy">
-            <p class="eyebrow">Admin Workbench</p>
-            <h1>API Playground</h1>
+            <p class="eyebrow" data-i18n="app.header.eyebrow">Admin Workbench</p>
+            <h1 data-i18n="app.header.title">API Playground</h1>
           </div>
         </div>
 
         <div class="app-bar-center">
           <div class="status-panel">
             <span class="status-dot" aria-hidden="true"></span>
-            <span id="globalStatus" class="status">Pronto.</span>
+            <span id="globalStatus" class="status" data-i18n="app.header.statusReady">Pronto.</span>
           </div>
         </div>
 
         <div class="app-bar-actions">
-          <button type="button" id="healthBtn" class="secondary compact-button">Health</button>
-          <button type="button" id="meBtn" class="secondary compact-button">Me</button>
-          <button type="button" id="bootstrapBtn" class="compact-button">Atualizar</button>
-          <a href="/swagger" target="_blank" class="swagger-link">Swagger ↗</a>
-          <button type="button" id="configBtn" class="secondary compact-button" aria-label="Configurações">⚙</button>
-          <button type="button" id="inspectorToggleBtn" class="secondary compact-button" aria-label="Alternar inspector">◧</button>
-          <button type="button" id="themeToggleBtn" class="secondary compact-button">Tema</button>
-          <button type="button" id="exitPlaygroundBtn" class="secondary compact-button">Sair</button>
+          <button type="button" id="healthBtn" class="secondary compact-button" data-i18n="app.header.health">Health</button>
+          <button type="button" id="meBtn" class="secondary compact-button" data-i18n="app.header.me">Me</button>
+          <button type="button" id="bootstrapBtn" class="compact-button" data-i18n="app.header.refresh">Atualizar</button>
+          <a href="/swagger" target="_blank" class="swagger-link" data-i18n="app.header.swagger">Swagger ↗</a>
+          <button type="button" id="configBtn" class="secondary compact-button" data-i18n-aria-label="app.header.configAriaLabel" aria-label="Configurações">⚙</button>
+          <button type="button" id="inspectorToggleBtn" class="secondary compact-button" data-i18n-aria-label="app.header.inspectorAriaLabel" aria-label="Alternar inspector">◧</button>
+          <div class="lang-toggle" data-lang-toggle data-i18n-aria-label="app.header.langAriaLabel" role="group" aria-label="Idioma">
+            <button type="button" class="lang-toggle-btn" data-lang-value="pt-BR">PT</button>
+            <button type="button" class="lang-toggle-btn" data-lang-value="en">EN</button>
+          </div>
+          <button type="button" id="themeToggleBtn" class="secondary compact-button" data-i18n="app.header.theme">Tema</button>
+          <button type="button" id="exitPlaygroundBtn" class="secondary compact-button" data-i18n="app.header.exit">Sair</button>
         </div>
       </header>
 
       <div class="content-layout">
 
         <aside class="sidebar" id="sidebar">
-          <button type="button" id="sidebarToggleBtn" class="sidebar-collapse-btn secondary compact-button" aria-label="Recolher sidebar">‹</button>
+          <button type="button" id="sidebarToggleBtn" class="sidebar-collapse-btn secondary compact-button" data-i18n-aria-label="app.nav.sidebarCollapseAriaLabel" aria-label="Recolher sidebar">‹</button>
 
-          <nav class="tab-rail" aria-label="Navegação principal">
+          <nav class="tab-rail" data-i18n-aria-label="app.nav.ariaLabel" aria-label="Navegação principal">
             <button type="button" class="tab-button active" data-tab="dashboard">
               <span class="tab-icon">◈</span>
               <span class="tab-copy">
-                <strong>Dashboard</strong>
-                <small>Visão geral</small>
+                <strong data-i18n="app.nav.dashboard">Dashboard</strong>
+                <small data-i18n="app.nav.dashboardSub">Visão geral</small>
               </span>
               <span class="tab-index">01</span>
             </button>
             <button type="button" class="tab-button" data-tab="questions">
               <span class="tab-icon">?</span>
               <span class="tab-copy">
-                <strong>Perguntas</strong>
-                <small>Filtro e criação</small>
+                <strong data-i18n="app.nav.questions">Perguntas</strong>
+                <small data-i18n="app.nav.questionsSub">Filtro e criação</small>
               </span>
               <span class="tab-index">02</span>
             </button>
             <button type="button" class="tab-button" data-tab="quizzes">
               <span class="tab-icon">▶</span>
               <span class="tab-copy">
-                <strong>Quizzes</strong>
-                <small>Runner e tentativa</small>
+                <strong data-i18n="app.nav.quizzes">Quizzes</strong>
+                <small data-i18n="app.nav.quizzesSub">Runner e tentativa</small>
               </span>
               <span class="tab-index">03</span>
             </button>
             <button type="button" class="tab-button" data-tab="practice">
               <span class="tab-icon">✎</span>
               <span class="tab-copy">
-                <strong>Prática</strong>
-                <small>Modo livre</small>
+                <strong data-i18n="app.nav.practice">Prática</strong>
+                <small data-i18n="app.nav.practiceSub">Modo livre</small>
               </span>
               <span class="tab-index">04</span>
             </button>
             <button type="button" class="tab-button" data-tab="admin">
               <span class="tab-icon">⚙</span>
               <span class="tab-copy">
-                <strong>Admin</strong>
-                <small>IA · Revisão · Categorias</small>
+                <strong data-i18n="app.nav.admin">Admin</strong>
+                <small data-i18n="app.nav.adminSub">IA · Revisão · Categorias</small>
               </span>
               <span class="tab-index">05</span>
             </button>
@@ -94,19 +98,19 @@
           <div class="sidebar-session" id="sessionChip">
             <div class="session-avatar" aria-hidden="true">—</div>
             <div id="currentUserSummary" class="session-info">
-              <span class="session-name">Não autenticado</span>
+              <span class="session-name" data-i18n="app.session.notAuthenticated">Não autenticado</span>
             </div>
-            <button type="button" id="sessionDetailsBtn" class="secondary compact-button" aria-label="Detalhes da sessão">⋯</button>
+            <button type="button" id="sessionDetailsBtn" class="secondary compact-button" data-i18n-aria-label="app.session.detailsAriaLabel" aria-label="Detalhes da sessão">⋯</button>
           </div>
         </aside>
 
         <section class="workspace">
           <header class="workspace-head">
             <div>
-              <p class="eyebrow">Fluxo ativo</p>
-              <h2 id="activeTabLabel" class="workspace-title">Dashboard</h2>
+              <p class="eyebrow" data-i18n="app.workspace.activeFlowEyebrow">Fluxo ativo</p>
+              <h2 id="activeTabLabel" class="workspace-title" data-i18n="app.workspace.dashboardTitle">Dashboard</h2>
             </div>
-            <p id="activeTabSummary" class="workspace-summary">Visão rápida de dados, saúde e atalhos.</p>
+            <p id="activeTabSummary" class="workspace-summary" data-i18n="app.workspace.dashboardSummary">Visão rápida de dados, saúde e atalhos.</p>
           </header>
 
           <div class="workspace-body">
@@ -115,36 +119,36 @@
             <section class="tab-panel active" data-panel="dashboard">
               <div class="stats">
                 <article class="stat">
-                  <span class="section-title">Categorias</span>
+                  <span class="section-title" data-i18n="app.dashboard.statCategories">Categorias</span>
                   <span class="value" id="dashboardCategoryCount">0</span>
                 </article>
                 <article class="stat">
-                  <span class="section-title">Perguntas públicas</span>
+                  <span class="section-title" data-i18n="app.dashboard.statQuestions">Perguntas públicas</span>
                   <span class="value" id="dashboardQuestionCount">0</span>
                 </article>
                 <article class="stat">
-                  <span class="section-title">Quizzes públicos</span>
+                  <span class="section-title" data-i18n="app.dashboard.statQuizzes">Quizzes públicos</span>
                   <span class="value" id="dashboardQuizCount">0</span>
                 </article>
                 <article class="stat">
-                  <span class="section-title">Seleção para quiz</span>
+                  <span class="section-title" data-i18n="app.dashboard.statSelection">Seleção para quiz</span>
                   <span class="value" id="dashboardSelectionCount">0</span>
                 </article>
               </div>
 
               <div class="split" style="margin-top: 18px;">
                 <article class="card action-card">
-                  <h2>Teste rápido</h2>
+                  <h2 data-i18n="app.dashboard.quickTest">Teste rápido</h2>
                   <div class="actions">
-                    <button type="button" id="dashboardLoadCategoriesBtn">Categorias</button>
-                    <button type="button" id="dashboardLoadQuestionsBtn" class="secondary">Perguntas</button>
-                    <button type="button" id="dashboardLoadQuizzesBtn" class="secondary">Quizzes</button>
-                    <button type="button" id="dashboardOpenRunnerBtn" class="warning">Abrir runner</button>
+                    <button type="button" id="dashboardLoadCategoriesBtn" data-i18n="app.dashboard.btnCategories">Categorias</button>
+                    <button type="button" id="dashboardLoadQuestionsBtn" class="secondary" data-i18n="app.dashboard.btnQuestions">Perguntas</button>
+                    <button type="button" id="dashboardLoadQuizzesBtn" class="secondary" data-i18n="app.dashboard.btnQuizzes">Quizzes</button>
+                    <button type="button" id="dashboardOpenRunnerBtn" class="warning" data-i18n="app.dashboard.btnOpenRunner">Abrir runner</button>
                   </div>
                 </article>
                 <article class="card state-card">
-                  <h2>Estado atual</h2>
-                  <div id="dashboardState" class="hint">
+                  <h2 data-i18n="app.dashboard.currentState">Estado atual</h2>
+                  <div id="dashboardState" class="hint" data-i18n="app.dashboard.currentStateEmpty">
                     Nenhuma informação carregada ainda.
                   </div>
                 </article>
@@ -152,33 +156,33 @@
 
               <div class="split" style="margin-top: 18px;">
                 <article class="card">
-                  <h2>Leaderboard Global</h2>
+                  <h2 data-i18n="app.dashboard.leaderboardGlobal">Leaderboard Global</h2>
                   <label style="margin-top: 10px;">
                     Limit
                     <input id="leaderboardLimit" type="number" min="1" max="100" value="10" style="width: 80px;" />
                   </label>
                   <div class="actions" style="margin-top: 12px;">
-                    <button type="button" id="loadLeaderboardBtn">Carregar ranking</button>
+                    <button type="button" id="loadLeaderboardBtn" data-i18n="app.dashboard.btnLoadLeaderboard">Carregar ranking</button>
                   </div>
                 </article>
                 <article class="card">
-                  <h2>Ranking</h2>
+                  <h2 data-i18n="app.dashboard.ranking">Ranking</h2>
                   <div id="leaderboardList" class="resource-list">
-                    <div class="empty">Clique em "Carregar ranking".</div>
+                    <div class="empty" data-i18n="app.dashboard.leaderboardEmpty">Clique em "Carregar ranking".</div>
                   </div>
                 </article>
               </div>
 
               <div class="split" style="margin-top: 18px;">
                 <article class="card">
-                  <h2>Upload de imagem</h2>
+                  <h2 data-i18n="app.dashboard.uploadImage">Upload de imagem</h2>
                   <div class="grid two" style="margin-top: 10px;">
                     <label>
-                      Arquivo (JPEG · PNG · WebP · GIF — max 5 MB)
+                      <span data-i18n="app.dashboard.uploadFileLabel">Arquivo (JPEG · PNG · WebP · GIF — max 5 MB)</span>
                       <input type="file" id="uploadImageFile" accept="image/jpeg,image/png,image/webp,image/gif" />
                     </label>
                     <label>
-                      Folder
+                      <span data-i18n="app.dashboard.uploadFolder">Folder</span>
                       <select id="uploadImageFolder">
                         <option value="questions">questions</option>
                         <option value="avatars">avatars</option>
@@ -187,30 +191,30 @@
                     </label>
                   </div>
                   <div class="actions" style="margin-top: 12px;">
-                    <button type="button" id="uploadImageBtn">Enviar imagem</button>
+                    <button type="button" id="uploadImageBtn" data-i18n="app.dashboard.btnUpload">Enviar imagem</button>
                   </div>
-                  <div id="uploadResult" class="empty" style="margin-top: 14px;">Nenhum upload realizado.</div>
+                  <div id="uploadResult" class="empty" style="margin-top: 14px;" data-i18n="app.dashboard.uploadEmpty">Nenhum upload realizado.</div>
                   <div style="margin: 16px 0; border-top: 1px solid var(--border);"></div>
                   <label>
-                    Buscar URL assinada por chave
-                    <input id="signedUrlKey" placeholder="uuid/filename.jpg" />
+                    <span data-i18n="app.dashboard.signedUrlLabel">Buscar URL assinada por chave</span>
+                    <input id="signedUrlKey" data-i18n-placeholder="app.dashboard.signedUrlPlaceholder" placeholder="uuid/filename.jpg" />
                   </label>
                   <div class="actions" style="margin-top: 10px;">
-                    <button type="button" id="getSignedUrlBtn" class="secondary">Buscar URL</button>
+                    <button type="button" id="getSignedUrlBtn" class="secondary" data-i18n="app.dashboard.btnGetSignedUrl">Buscar URL</button>
                   </div>
-                  <div id="signedUrlResult" class="empty" style="margin-top: 10px;">Nenhuma chave consultada.</div>
+                  <div id="signedUrlResult" class="empty" style="margin-top: 10px;" data-i18n="app.dashboard.signedUrlEmpty">Nenhuma chave consultada.</div>
                 </article>
                 <article class="card">
-                  <h2>Perfil de Usuário</h2>
+                  <h2 data-i18n="app.dashboard.userProfile">Perfil de Usuário</h2>
                   <label style="margin-top: 10px;">
-                    User UUID
-                    <input id="lookupUserId" placeholder="UUID do usuário" />
+                    <span>User UUID</span>
+                    <input id="lookupUserId" data-i18n-placeholder="app.dashboard.userIdPlaceholder" placeholder="UUID do usuário" />
                   </label>
                   <div class="actions" style="margin-top: 12px;">
-                    <button type="button" id="lookupUserProfileBtn">Carregar perfil</button>
-                    <button type="button" id="lookupUserHistoryBtn" class="secondary">Histórico</button>
+                    <button type="button" id="lookupUserProfileBtn" data-i18n="app.dashboard.btnLoadProfile">Carregar perfil</button>
+                    <button type="button" id="lookupUserHistoryBtn" class="secondary" data-i18n="app.dashboard.btnLoadHistory">Histórico</button>
                   </div>
-                  <div id="userProfileResult" class="empty" style="margin-top: 14px;">Nenhum perfil carregado.</div>
+                  <div id="userProfileResult" class="empty" style="margin-top: 14px;" data-i18n="app.dashboard.userProfileEmpty">Nenhum perfil carregado.</div>
                 </article>
               </div>
             </section>
@@ -219,16 +223,16 @@
             <section class="tab-panel" data-panel="questions">
               <div class="stack">
                 <article class="card">
-                  <h2>Explorar perguntas</h2>
+                  <h2 data-i18n="app.questions.explore">Explorar perguntas</h2>
                   <div class="grid three">
                     <label>
                       Search
-                      <input id="questionSearch" placeholder="javascript, arrays, async..." />
+                      <input id="questionSearch" data-i18n-placeholder="app.questions.searchPlaceholder" placeholder="javascript, arrays, async..." />
                     </label>
                     <label>
                       Difficulty
                       <select id="questionDifficulty">
-                        <option value="">Todas</option>
+                        <option value="" data-i18n="app.questions.difficultyAll">Todas</option>
                         <option value="beginner">beginner</option>
                         <option value="easy">easy</option>
                         <option value="medium">medium</option>
@@ -239,24 +243,24 @@
                     <label>
                       Category
                       <select id="questionCategoryFilter">
-                        <option value="">Todas</option>
+                        <option value="" data-i18n="app.questions.categoryAll">Todas</option>
                       </select>
                     </label>
                   </div>
                   <label class="checklist-item" style="margin-top: 12px;">
                     <input type="checkbox" id="questionAuthorMe" />
-                    <span>Apenas as minhas (<code>?author=me</code>)</span>
+                    <span data-i18n="app.questions.onlyMine">Apenas as minhas (<code>?author=me</code>)</span>
                   </label>
                   <div class="actions" style="margin-top: 10px;">
-                    <button type="button" id="loadCategoriesBtn" class="secondary">Categorias</button>
-                    <button type="button" id="loadQuestionsBtn">Listar perguntas</button>
-                    <button type="button" id="openCreateQuestionModalBtn" class="secondary">Nova pergunta ↗</button>
+                    <button type="button" id="loadCategoriesBtn" class="secondary" data-i18n="app.questions.btnLoadCategories">Categorias</button>
+                    <button type="button" id="loadQuestionsBtn" data-i18n="app.questions.btnList">Listar perguntas</button>
+                    <button type="button" id="openCreateQuestionModalBtn" class="secondary" data-i18n="app.questions.btnCreate">Nova pergunta ↗</button>
                   </div>
                 </article>
                 <article class="card">
-                  <h2>Perguntas públicas</h2>
+                  <h2 data-i18n="app.questions.listTitle">Perguntas públicas</h2>
                   <div id="questionList" class="resource-list">
-                    <div class="empty">Nenhuma pergunta carregada ainda.</div>
+                    <div class="empty" data-i18n="app.questions.listEmpty">Nenhuma pergunta carregada ainda.</div>
                   </div>
                 </article>
               </div>
@@ -266,24 +270,24 @@
             <section class="tab-panel" data-panel="quizzes">
               <div class="stack">
                 <article class="card">
-                  <h2>Explorar quizzes</h2>
+                  <h2 data-i18n="app.quizzes.explore">Explorar quizzes</h2>
                   <label>
                     Search
-                    <input id="quizSearch" placeholder="Procure por título..." />
+                    <input id="quizSearch" data-i18n-placeholder="app.quizzes.searchPlaceholder" placeholder="Procure por título..." />
                   </label>
                   <label class="checklist-item" style="margin-top: 12px;">
                     <input type="checkbox" id="quizAuthorMe" />
-                    <span>Apenas os meus (<code>?author=me</code>)</span>
+                    <span data-i18n="app.quizzes.onlyMine">Apenas os meus (<code>?author=me</code>)</span>
                   </label>
                   <div class="actions" style="margin-top: 10px;">
-                    <button type="button" id="loadQuizzesBtn">Listar quizzes</button>
-                    <button type="button" id="openCreateQuizModalBtn" class="secondary">Criar quiz ↗</button>
+                    <button type="button" id="loadQuizzesBtn" data-i18n="app.quizzes.btnList">Listar quizzes</button>
+                    <button type="button" id="openCreateQuizModalBtn" class="secondary" data-i18n="app.quizzes.btnCreate">Criar quiz ↗</button>
                   </div>
                 </article>
                 <article class="card">
-                  <h2>Quizzes públicos</h2>
+                  <h2 data-i18n="app.quizzes.listTitle">Quizzes públicos</h2>
                   <div id="quizList" class="resource-list">
-                    <div class="empty">Nenhum quiz carregado ainda.</div>
+                    <div class="empty" data-i18n="app.quizzes.listEmpty">Nenhum quiz carregado ainda.</div>
                   </div>
                 </article>
               </div>
@@ -294,7 +298,7 @@
               <div class="split">
                 <div class="stack">
                   <article class="card">
-                    <h2>Modo Livre (Lote Aleatório)</h2>
+                    <h2 data-i18n="app.practice.batchTitle">Modo Livre (Lote Aleatório)</h2>
                     <div class="grid three">
                       <label>
                         Limit
@@ -303,7 +307,7 @@
                       <label>
                         Difficulty
                         <select id="practiceDifficulty">
-                          <option value="">Qualquer</option>
+                          <option value="" data-i18n="app.practice.difficultyAny">Qualquer</option>
                           <option value="beginner">beginner</option>
                           <option value="easy">easy</option>
                           <option value="medium">medium</option>
@@ -314,7 +318,7 @@
                       <label>
                         Category
                         <select id="practiceCategorySelect">
-                          <option value="">Todas</option>
+                          <option value="" data-i18n="app.practice.categoryAll">Todas</option>
                         </select>
                       </label>
                     </div>
@@ -335,19 +339,19 @@
                       </label>
                     </div>
                     <div class="actions" style="margin-top: 14px;">
-                      <button type="button" id="loadPracticeQuestionsBtn">Processar Lote Livre</button>
+                      <button type="button" id="loadPracticeQuestionsBtn" data-i18n="app.practice.btnProcess">Processar Lote Livre</button>
                     </div>
                   </article>
                   <article class="card">
-                    <h2>Resultado da Resposta</h2>
-                    <div id="practiceResult" class="empty">Resposta não submetida ainda.</div>
+                    <h2 data-i18n="app.practice.resultTitle">Resultado da Resposta</h2>
+                    <div id="practiceResult" class="empty" data-i18n="app.practice.resultEmpty">Resposta não submetida ainda.</div>
                   </article>
                 </div>
                 <div class="stack">
                   <article class="card">
-                    <h2>Lote (Responder)</h2>
+                    <h2 data-i18n="app.practice.answerTitle">Lote (Responder)</h2>
                     <div id="practiceQuestionsList" class="resource-list">
-                      <div class="empty">Nenhum lote processado ainda.</div>
+                      <div class="empty" data-i18n="app.practice.answerEmpty">Nenhum lote processado ainda.</div>
                     </div>
                   </article>
                 </div>
@@ -357,21 +361,21 @@
             <!-- Admin (IA · Revisão · Categorias) -->
             <section class="tab-panel" data-panel="admin">
               <div class="sub-tab-rail" role="tablist" aria-label="Admin">
-                <button type="button" class="sub-tab active" data-admin-tab="ai" role="tab">IA</button>
-                <button type="button" class="sub-tab" data-admin-tab="review" role="tab">Revisão</button>
-                <button type="button" class="sub-tab" data-admin-tab="categories" role="tab">Categorias</button>
-                <button type="button" class="sub-tab" data-admin-tab="users" role="tab">Usuários</button>
+                <button type="button" class="sub-tab active" data-admin-tab="ai" role="tab" data-i18n="app.admin.tabAi">IA</button>
+                <button type="button" class="sub-tab" data-admin-tab="review" role="tab" data-i18n="app.admin.tabReview">Revisão</button>
+                <button type="button" class="sub-tab" data-admin-tab="categories" role="tab" data-i18n="app.admin.tabCategories">Categorias</button>
+                <button type="button" class="sub-tab" data-admin-tab="users" role="tab" data-i18n="app.admin.tabUsers">Usuários</button>
               </div>
 
               <!-- IA -->
               <div class="admin-sub-panel active" data-admin-panel="ai">
                 <div class="split">
                   <article class="card">
-                    <h2>Gerar com IA</h2>
+                    <h2 data-i18n="app.admin.ai.generateTitle">Gerar com IA</h2>
                     <div class="grid two" style="margin-top: 12px;">
                       <label>
-                        Tema
-                        <input id="aiCategory" placeholder="React, SQL, TypeScript..." />
+                        <span data-i18n="app.admin.ai.themeLabel">Tema</span>
+                        <input id="aiCategory" data-i18n-placeholder="app.admin.ai.themePlaceholder" placeholder="React, SQL, TypeScript..." />
                       </label>
                       <label>
                         Difficulty
@@ -400,24 +404,24 @@
                       <select id="aiCategoryIds" multiple></select>
                     </label>
                     <div class="actions" style="margin-top: 14px;">
-                      <button type="button" id="generateAiBtn" class="warning">Gerar questões</button>
+                      <button type="button" id="generateAiBtn" class="warning" data-i18n="app.admin.ai.btnGenerate">Gerar questões</button>
                     </div>
                   </article>
 
                   <article class="card">
-                    <h2>Gerar Quiz Completo (IA)</h2>
+                    <h2 data-i18n="app.admin.ai.quizTitle">Gerar Quiz Completo (IA)</h2>
                     <div class="grid two" style="margin-top: 12px;">
                       <label>
-                        Título
-                        <input id="aiQuizTitle" placeholder="Quiz de Inovação..." />
+                        <span data-i18n="app.admin.ai.quizTitleLabel">Título</span>
+                        <input id="aiQuizTitle" data-i18n-placeholder="app.admin.ai.quizTitlePlaceholder" placeholder="Quiz de Inovação..." />
                       </label>
                       <label>
-                        Descrição
-                        <input id="aiQuizDescription" placeholder="Opcional" />
+                        <span data-i18n="app.admin.ai.quizDescLabel">Descrição</span>
+                        <input id="aiQuizDescription" data-i18n-placeholder="app.admin.ai.quizDescPlaceholder" placeholder="Opcional" />
                       </label>
                       <label>
-                        Tema
-                        <input id="aiQuizCategory" placeholder="Agile, DevOps..." />
+                        <span data-i18n="app.admin.ai.themeLabel">Tema</span>
+                        <input id="aiQuizCategory" data-i18n-placeholder="app.admin.ai.quizThemePlaceholder" placeholder="Agile, DevOps..." />
                       </label>
                       <label>
                         Language
@@ -427,7 +431,7 @@
                         </select>
                       </label>
                     </div>
-                    <strong style="display: block; margin-top: 16px;">Difficulty Mix</strong>
+                    <strong style="display: block; margin-top: 16px;" data-i18n="app.admin.ai.difficultyMix">Difficulty Mix</strong>
                     <div class="grid three" style="margin-top: 8px;">
                       <label>Beginner <input id="aiQuizMixBeginner" type="number" min="0" max="10" value="0" /></label>
                       <label>Easy <input id="aiQuizMixEasy" type="number" min="0" max="10" value="2" /></label>
@@ -440,13 +444,13 @@
                       <select id="aiQuizCategoryIds" multiple></select>
                     </label>
                     <div class="actions" style="margin-top: 14px;">
-                      <button type="button" id="generateAiQuizBtn" class="warning">Gerar quiz draft</button>
+                      <button type="button" id="generateAiQuizBtn" class="warning" data-i18n="app.admin.ai.btnGenerateQuiz">Gerar quiz draft</button>
                     </div>
                   </article>
 
                   <article class="card">
-                    <h2>Resultado</h2>
-                    <div id="adminResult" class="empty">Nenhuma ação admin executada ainda.</div>
+                    <h2 data-i18n="app.admin.ai.resultTitle">Resultado</h2>
+                    <div id="adminResult" class="empty" data-i18n="app.admin.ai.resultEmpty">Nenhuma ação admin executada ainda.</div>
                   </article>
                 </div>
               </div>
@@ -456,30 +460,30 @@
                 <div class="split">
                   <article class="card">
                     <div class="card-heading">
-                      <h2>Perguntas Pendentes</h2>
+                      <h2 data-i18n="app.admin.review.pendingQuestionsTitle">Perguntas Pendentes</h2>
                     </div>
                     <div class="actions">
-                      <button type="button" id="loadPendingQuestionsBtn">Carregar perguntas</button>
+                      <button type="button" id="loadPendingQuestionsBtn" data-i18n="app.admin.review.btnLoadQuestions">Carregar perguntas</button>
                     </div>
                     <div id="pendingQuestionsList" class="resource-list" style="margin-top: 16px;">
-                      <div class="empty">Nenhuma pergunta pendente carregada.</div>
+                      <div class="empty" data-i18n="app.admin.review.pendingQuestionsEmpty">Nenhuma pergunta pendente carregada.</div>
                     </div>
                   </article>
                   <div class="stack">
                     <article class="card">
                       <div class="card-heading">
-                        <h2>Quizzes Pendentes</h2>
+                        <h2 data-i18n="app.admin.review.pendingQuizzesTitle">Quizzes Pendentes</h2>
                       </div>
                       <div class="actions">
-                        <button type="button" id="loadPendingQuizzesBtn">Carregar quizzes</button>
+                        <button type="button" id="loadPendingQuizzesBtn" data-i18n="app.admin.review.btnLoadQuizzes">Carregar quizzes</button>
                       </div>
                       <div id="pendingQuizzesList" class="resource-list" style="margin-top: 16px;">
-                        <div class="empty">Nenhum quiz pendente carregado.</div>
+                        <div class="empty" data-i18n="app.admin.review.pendingQuizzesEmpty">Nenhum quiz pendente carregado.</div>
                       </div>
                     </article>
                     <article class="card">
-                      <h2>Resultado da Revisão</h2>
-                      <div id="reviewResult" class="empty">Nenhuma ação de revisão executada.</div>
+                      <h2 data-i18n="app.admin.review.resultTitle">Resultado da Revisão</h2>
+                      <div id="reviewResult" class="empty" data-i18n="app.admin.review.resultEmpty">Nenhuma ação de revisão executada.</div>
                     </article>
                   </div>
                 </div>
@@ -490,20 +494,20 @@
                 <div class="stack">
                   <article class="card">
                     <div class="card-heading">
-                      <h2>Lista de categorias</h2>
-                      <span class="mini-chip">admin</span>
+                      <h2 data-i18n="app.admin.categories.listTitle">Lista de categorias</h2>
+                      <span class="mini-chip" data-i18n="common.admin">admin</span>
                     </div>
                     <div class="actions">
-                      <button type="button" id="loadAdminCategoriesBtn">Carregar lista</button>
-                      <button type="button" id="openCreateCategoryModalBtn" class="secondary">Nova categoria ↗</button>
+                      <button type="button" id="loadAdminCategoriesBtn" data-i18n="app.admin.categories.btnLoad">Carregar lista</button>
+                      <button type="button" id="openCreateCategoryModalBtn" class="secondary" data-i18n="app.admin.categories.btnCreate">Nova categoria ↗</button>
                     </div>
                     <div id="categoryAdminList" class="resource-list" style="margin-top: 14px;">
-                      <div class="empty">Clique em "Carregar lista" para ver as categorias existentes.</div>
+                      <div class="empty" data-i18n="app.admin.categories.listEmpty">Clique em "Carregar lista" para ver as categorias existentes.</div>
                     </div>
                   </article>
                   <article class="card">
-                    <h2>Resultado</h2>
-                    <div id="categoryAdminResult" class="empty">Nenhuma ação de categorias executada ainda.</div>
+                    <h2 data-i18n="common.result">Resultado</h2>
+                    <div id="categoryAdminResult" class="empty" data-i18n="app.admin.categories.resultEmpty">Nenhuma ação de categorias executada ainda.</div>
                   </article>
                 </div>
               </div>
@@ -514,28 +518,28 @@
                   <div class="stack">
                     <article class="card">
                       <div class="card-heading">
-                        <h2>Listar usuários</h2>
-                        <span class="mini-chip">admin</span>
+                        <h2 data-i18n="app.admin.users.listTitle">Listar usuários</h2>
+                        <span class="mini-chip" data-i18n="common.admin">admin</span>
                       </div>
                       <div class="grid two" style="margin-top: 12px;">
                         <label>
-                          Busca (username ou email)
-                          <input id="adminUserSearch" placeholder="ana, @example.com..." />
+                          <span data-i18n="app.admin.users.searchLabel">Busca (username ou email)</span>
+                          <input id="adminUserSearch" data-i18n-placeholder="app.admin.users.searchPlaceholder" placeholder="ana, @example.com..." />
                         </label>
                         <label>
                           Role
                           <select id="adminUserRoleFilter">
-                            <option value="">Todos</option>
+                            <option value="" data-i18n="app.admin.users.roleAll">Todos</option>
                             <option value="user">user</option>
                             <option value="admin">admin</option>
                           </select>
                         </label>
                       </div>
                       <div class="actions" style="margin-top: 12px;">
-                        <button type="button" id="loadAdminUsersBtn">Buscar usuários</button>
+                        <button type="button" id="loadAdminUsersBtn" data-i18n="app.admin.users.btnSearch">Buscar usuários</button>
                       </div>
                       <div id="adminUserList" class="resource-list" style="margin-top: 14px;">
-                        <div class="empty">Clique em "Buscar usuários" para listar.</div>
+                        <div class="empty" data-i18n="app.admin.users.listEmpty">Clique em "Buscar usuários" para listar.</div>
                       </div>
                     </article>
                   </div>
@@ -543,30 +547,30 @@
                   <div class="stack">
                     <article class="card">
                       <div class="card-heading">
-                        <h2>Reset de senha</h2>
-                        <span class="mini-chip">admin</span>
+                        <h2 data-i18n="app.admin.users.resetTitle">Reset de senha</h2>
+                        <span class="mini-chip" data-i18n="common.admin">admin</span>
                       </div>
-                      <p class="hint" style="margin-top: 10px;">
+                      <p class="hint" style="margin-top: 10px;" data-i18n="app.admin.users.resetHint">
                         Redefine a senha de qualquer conta. Todas as sessões do alvo são revogadas.
                         Clique em "Usar UUID" na lista para preencher automaticamente.
                       </p>
                       <div class="grid two" style="margin-top: 14px;">
                         <label>
                           User UUID
-                          <input id="adminResetUserId" placeholder="UUID do usuário alvo" />
+                          <input id="adminResetUserId" data-i18n-placeholder="app.admin.users.userIdPlaceholder" placeholder="UUID do usuário alvo" />
                         </label>
                         <label>
-                          Nova senha (opcional)
-                          <input type="password" id="adminResetNewPassword" autocomplete="new-password" placeholder="Vazio = gerar automaticamente" />
+                          <span><span data-i18n="app.modal.sessionDetails.newPasswordLabel">Nova senha</span> (<span data-i18n="common.optional">opcional</span>)</span>
+                          <input type="password" id="adminResetNewPassword" autocomplete="new-password" data-i18n-placeholder="app.admin.users.newPasswordPlaceholder" placeholder="Vazio = gerar automaticamente" />
                         </label>
                       </div>
                       <div class="actions" style="margin-top: 14px;">
-                        <button type="button" id="adminResetPasswordBtn" class="warning">Resetar senha</button>
+                        <button type="button" id="adminResetPasswordBtn" class="warning" data-i18n="app.admin.users.btnReset">Resetar senha</button>
                       </div>
                     </article>
                     <article class="card">
-                      <h2>Resultado</h2>
-                      <div id="adminUsersResult" class="empty">Nenhuma ação de usuários executada ainda.</div>
+                      <h2 data-i18n="common.result">Resultado</h2>
+                      <div id="adminUsersResult" class="empty" data-i18n="app.admin.users.resultEmpty">Nenhuma ação de usuários executada ainda.</div>
                     </article>
                   </div>
                 </div>
@@ -579,44 +583,44 @@
         <!-- Inspector drawer (toggle via header button) -->
         <aside class="inspector-drawer" id="inspectorDrawer" hidden>
           <div class="inspector-head">
-            <p class="eyebrow">Inspector</p>
-            <h2>Resultado e rede</h2>
+            <p class="eyebrow" data-i18n="app.inspector.eyebrow">Inspector</p>
+            <h2 data-i18n="app.inspector.title">Resultado e rede</h2>
           </div>
 
           <article class="card result-card">
             <div class="card-heading">
-              <h2>Último resultado</h2>
-              <span class="mini-chip">fluxo</span>
+              <h2 data-i18n="app.inspector.lastResultTitle">Último resultado</h2>
+              <span class="mini-chip" data-i18n="app.inspector.lastResultChip">fluxo</span>
             </div>
-            <div id="latestResultSummary" class="empty">Nenhum fluxo executado ainda.</div>
+            <div id="latestResultSummary" class="empty" data-i18n="app.inspector.lastResultEmpty">Nenhum fluxo executado ainda.</div>
           </article>
 
           <article class="card console-card">
             <div class="console-toolbar">
               <div class="toolbar">
-                <span class="pill">Rede</span>
-                <span id="requestStatus" class="status">Aguardando request.</span>
+                <span class="pill" data-i18n="app.inspector.networkPill">Rede</span>
+                <span id="requestStatus" class="status" data-i18n="app.inspector.networkStatus">Aguardando request.</span>
               </div>
             </div>
-            <div class="console-tab-rail" role="tablist" aria-label="Console">
-              <button type="button" class="console-tab active" data-console-tab="history" role="tab" aria-selected="true">Histórico</button>
-              <button type="button" class="console-tab" data-console-tab="request" role="tab" aria-selected="false">Request</button>
-              <button type="button" class="console-tab" data-console-tab="headers" role="tab" aria-selected="false">Headers</button>
-              <button type="button" class="console-tab" data-console-tab="response" role="tab" aria-selected="false">Response</button>
+            <div class="console-tab-rail" role="tablist" data-i18n-aria-label="app.inspector.eyebrow" aria-label="Console">
+              <button type="button" class="console-tab active" data-console-tab="history" role="tab" aria-selected="true" data-i18n="app.inspector.tabHistory">Histórico</button>
+              <button type="button" class="console-tab" data-console-tab="request" role="tab" aria-selected="false" data-i18n="app.inspector.tabRequest">Request</button>
+              <button type="button" class="console-tab" data-console-tab="headers" role="tab" aria-selected="false" data-i18n="app.inspector.tabHeaders">Headers</button>
+              <button type="button" class="console-tab" data-console-tab="response" role="tab" aria-selected="false" data-i18n="app.inspector.tabResponse">Response</button>
             </div>
             <section class="console-panel active" data-console-panel="history">
               <div id="historyList" class="history-list">
-                <div class="empty">Nenhuma request ainda.</div>
+                <div class="empty" data-i18n="app.inspector.historyEmpty">Nenhuma request ainda.</div>
               </div>
             </section>
             <section class="console-panel" data-console-panel="request" hidden>
-              <pre id="requestPreview">Nenhuma request enviada ainda.</pre>
+              <pre id="requestPreview" data-i18n="app.inspector.requestEmpty">Nenhuma request enviada ainda.</pre>
             </section>
             <section class="console-panel" data-console-panel="headers" hidden>
-              <pre id="headersPreview">Nenhum header recebido ainda.</pre>
+              <pre id="headersPreview" data-i18n="app.inspector.headersEmpty">Nenhum header recebido ainda.</pre>
             </section>
             <section class="console-panel" data-console-panel="response" hidden>
-              <pre id="responsePreview">Nenhuma response recebida ainda.</pre>
+              <pre id="responsePreview" data-i18n="app.inspector.responseEmpty">Nenhuma response recebida ainda.</pre>
             </section>
           </article>
         </aside>
@@ -628,8 +632,8 @@
     <div class="selection-bar" id="selectionBar" hidden>
       <span id="selectedQuestionsSummary" class="selection-bar-text">0 perguntas selecionadas</span>
       <div class="selection-bar-actions">
-        <button type="button" id="clearSelectionBtn" class="secondary compact-button">Limpar</button>
-        <button type="button" id="openCreateQuizModalBtn2" class="compact-button">Criar quiz ↗</button>
+        <button type="button" id="clearSelectionBtn" class="secondary compact-button" data-i18n="app.selection.btnClear">Limpar</button>
+        <button type="button" id="openCreateQuizModalBtn2" class="compact-button" data-i18n="app.selection.btnCreateQuiz">Criar quiz ↗</button>
       </div>
     </div>
 
@@ -649,7 +653,7 @@
     <div id="modalTemplates" hidden aria-hidden="true">
 
       <div id="questionDetailTemplate">
-        <div id="questionDetail" class="empty">
+        <div id="questionDetail" class="empty" data-i18n="app.modal.questionDetail.empty">
           Clique em "Abrir detalhe" em uma pergunta para inspecionar corpo e opções.
         </div>
       </div>
@@ -657,7 +661,10 @@
       <div id="createQuestionTemplate">
         <div class="stack">
           <div class="grid two">
-            <label>Title <input id="createQuestionTitle" placeholder="Qual é a saída deste código?" /></label>
+            <label>
+              <span data-i18n="app.modal.createQuestion.titleLabel">Title</span>
+              <input id="createQuestionTitle" data-i18n-placeholder="app.modal.createQuestion.titlePlaceholder" placeholder="Qual é a saída deste código?" />
+            </label>
             <label>
               Difficulty
               <select id="createQuestionDifficulty">
@@ -668,11 +675,23 @@
                 <option value="expert">expert</option>
               </select>
             </label>
-            <label>Tempo estimado (s) <input id="createQuestionEstimatedTimeSeconds" type="number" min="15" max="900" value="60" /></label>
+            <label>
+              <span data-i18n="app.modal.createQuestion.estimatedTimeLabel">Tempo estimado (s)</span>
+              <input id="createQuestionEstimatedTimeSeconds" type="number" min="15" max="900" value="60" />
+            </label>
           </div>
-          <label>Body <textarea id="createQuestionBody" placeholder="Explique o enunciado da questão."></textarea></label>
-          <label>Explanation <textarea id="createQuestionExplanation" placeholder="Explicação da resposta correta."></textarea></label>
-          <label>Category IDs <select id="createQuestionCategories" multiple></select></label>
+          <label>
+            <span data-i18n="app.modal.createQuestion.bodyLabel">Body</span>
+            <textarea id="createQuestionBody" data-i18n-placeholder="app.modal.createQuestion.bodyPlaceholder" placeholder="Explique o enunciado da questão."></textarea>
+          </label>
+          <label>
+            <span data-i18n="app.modal.createQuestion.explanationLabel">Explanation</span>
+            <textarea id="createQuestionExplanation" data-i18n-placeholder="app.modal.createQuestion.explanationPlaceholder" placeholder="Explicação da resposta correta."></textarea>
+          </label>
+          <label>
+            <span data-i18n="app.modal.createQuestion.categoryLabel">Category IDs</span>
+            <select id="createQuestionCategories" multiple></select>
+          </label>
           <div class="grid two">
             <label>Option 1 <input id="option0" placeholder="Primeira opção" /></label>
             <label>Option 2 <input id="option1" placeholder="Segunda opção" /></label>
@@ -681,7 +700,7 @@
             <label>Option 5 <input id="option4" placeholder="Quinta opção" /></label>
           </div>
           <label>
-            Correct option
+            <span data-i18n="app.modal.createQuestion.correctOptionLabel">Correct option</span>
             <select id="createQuestionCorrectIndex">
               <option value="0">Option 1</option>
               <option value="1">Option 2</option>
@@ -691,40 +710,49 @@
             </select>
           </label>
           <div class="actions">
-            <button type="button" id="createQuestionBtn">Criar pergunta</button>
+            <button type="button" id="createQuestionBtn" data-i18n="app.modal.createQuestion.btnCreate">Criar pergunta</button>
           </div>
         </div>
       </div>
 
       <div id="quizRunnerTemplate">
-        <div id="quizRunner" class="empty">Abra um quiz da lista para responder aqui visualmente.</div>
+        <div id="quizRunner" class="empty" data-i18n="app.modal.quizRunner.empty">Abra um quiz da lista para responder aqui visualmente.</div>
       </div>
 
       <div id="createQuizTemplate">
         <div class="stack">
           <div class="grid two">
-            <label>Title <input id="createQuizTitle" placeholder="Quiz de JavaScript assíncrono" /></label>
             <label>
-              Público
+              <span data-i18n="app.modal.createQuiz.titleLabel">Title</span>
+              <input id="createQuizTitle" data-i18n-placeholder="app.modal.createQuiz.titlePlaceholder" placeholder="Quiz de JavaScript assíncrono" />
+            </label>
+            <label>
+              <span data-i18n="app.modal.createQuiz.publicLabel">Público</span>
               <select id="createQuizIsPublic">
                 <option value="true">true</option>
                 <option value="false">false</option>
               </select>
             </label>
           </div>
-          <label>Time limit (s) <input id="createQuizTimeLimit" type="number" min="30" placeholder="Sem limite" /></label>
-          <label>Description <textarea id="createQuizDescription" placeholder="Descrição opcional do quiz."></textarea></label>
-          <div id="createQuizSelectionSummary" class="hint">
+          <label>
+            <span data-i18n="app.modal.createQuiz.timeLimitLabel">Time limit (s)</span>
+            <input id="createQuizTimeLimit" type="number" min="30" data-i18n-placeholder="app.modal.createQuiz.timeLimitPlaceholder" placeholder="Sem limite" />
+          </label>
+          <label>
+            <span data-i18n="app.modal.createQuiz.descLabel">Description</span>
+            <textarea id="createQuizDescription" data-i18n-placeholder="app.modal.createQuiz.descPlaceholder" placeholder="Descrição opcional do quiz."></textarea>
+          </label>
+          <div id="createQuizSelectionSummary" class="hint" data-i18n="app.modal.createQuiz.selectionHint">
             Selecione perguntas na aba Questions para montar o quiz.
           </div>
           <div class="actions">
-            <button type="button" id="createQuizBtn">Criar quiz</button>
+            <button type="button" id="createQuizBtn" data-i18n="app.modal.createQuiz.btnCreate">Criar quiz</button>
           </div>
         </div>
       </div>
 
       <div id="pendingQuizDetailTemplate">
-        <div id="pendingQuizDetail" class="empty">
+        <div id="pendingQuizDetail" class="empty" data-i18n="app.modal.pendingQuizDetail.empty">
           Selecione um quiz na lista para exibir o detalhe.
         </div>
       </div>
@@ -732,8 +760,14 @@
       <div id="createCategoryTemplate">
         <div class="stack">
           <div class="grid two">
-            <label>Nome <input id="createCategoryName" placeholder="JavaScript" /></label>
-            <label>Slug <input id="createCategorySlug" placeholder="javascript" /></label>
+            <label>
+              <span data-i18n="app.modal.createCategory.nameLabel">Nome</span>
+              <input id="createCategoryName" placeholder="JavaScript" />
+            </label>
+            <label>
+              <span data-i18n="app.modal.createCategory.slugLabel">Slug</span>
+              <input id="createCategorySlug" placeholder="javascript" />
+            </label>
           </div>
           <label>
             Tipo
@@ -743,10 +777,16 @@
               <option value="area">area</option>
             </select>
           </label>
-          <label>Ícone (emoji ou texto) <input id="createCategoryIcon" placeholder="🟨" /></label>
-          <label>Descrição <textarea id="createCategoryDescription" placeholder="Descrição opcional da categoria."></textarea></label>
+          <label>
+            <span data-i18n="app.modal.createCategory.iconLabel">Ícone (emoji ou texto)</span>
+            <input id="createCategoryIcon" placeholder="🟨" />
+          </label>
+          <label>
+            <span data-i18n="app.modal.createCategory.descLabel">Descrição</span>
+            <textarea id="createCategoryDescription" data-i18n-placeholder="app.modal.createCategory.descPlaceholder" placeholder="Descrição opcional da categoria."></textarea>
+          </label>
           <div class="actions">
-            <button type="button" id="adminCreateCategoryBtn">Criar categoria</button>
+            <button type="button" id="adminCreateCategoryBtn" data-i18n="app.modal.createCategory.btnCreate">Criar categoria</button>
           </div>
         </div>
       </div>
@@ -755,8 +795,14 @@
         <div class="stack">
           <input type="hidden" id="editCategoryId" value="" />
           <div class="grid two">
-            <label>Nome <input id="editCategoryName" placeholder="Nome da categoria" /></label>
-            <label>Slug <input id="editCategorySlug" placeholder="slug-da-categoria" /></label>
+            <label>
+              <span data-i18n="app.modal.editCategory.nameLabel">Nome</span>
+              <input id="editCategoryName" placeholder="Nome da categoria" />
+            </label>
+            <label>
+              <span data-i18n="app.modal.editCategory.slugLabel">Slug</span>
+              <input id="editCategorySlug" placeholder="slug-da-categoria" />
+            </label>
           </div>
           <label>
             Tipo
@@ -766,17 +812,23 @@
               <option value="area">area</option>
             </select>
           </label>
-          <label>Ícone <input id="editCategoryIcon" placeholder="Ícone da categoria" /></label>
-          <label>Descrição <textarea id="editCategoryDescription" placeholder="Descrição da categoria"></textarea></label>
+          <label>
+            <span data-i18n="app.modal.editCategory.iconLabel">Ícone</span>
+            <input id="editCategoryIcon" placeholder="Ícone da categoria" />
+          </label>
+          <label>
+            <span data-i18n="app.modal.editCategory.descLabel">Descrição</span>
+            <textarea id="editCategoryDescription" placeholder="Descrição da categoria"></textarea>
+          </label>
           <div class="actions">
-            <button type="button" id="updateCategoryBtn">Salvar edição</button>
-            <button type="button" id="deleteCategoryBtn" class="warning">Excluir categoria</button>
+            <button type="button" id="updateCategoryBtn" data-i18n="app.modal.editCategory.btnSave">Salvar edição</button>
+            <button type="button" id="deleteCategoryBtn" class="warning" data-i18n="app.modal.editCategory.btnDelete">Excluir categoria</button>
           </div>
         </div>
       </div>
 
       <div id="quizLeaderboardTemplate">
-        <div id="quizLeaderboardContent" class="empty">
+        <div id="quizLeaderboardContent" class="empty" data-i18n="app.modal.quizLeaderboard.loading">
           Carregando leaderboard...
         </div>
       </div>
@@ -784,35 +836,41 @@
       <div id="configTemplate">
         <div class="stack">
           <label>
-            Base URL da API
+            <span data-i18n="app.modal.config.baseUrlLabel">Base URL da API</span>
             <input id="configBaseUrl" placeholder="/v1" />
           </label>
           <label>
-            Gemini API Key
-            <input id="configGeminiKey" type="password" autocomplete="off" placeholder="Salva localmente neste navegador" />
+            <span data-i18n="app.modal.config.geminiKeyLabel">Gemini API Key</span>
+            <input id="configGeminiKey" type="password" autocomplete="off" data-i18n-placeholder="app.modal.config.geminiKeyPlaceholder" placeholder="Salva localmente neste navegador" />
           </label>
           <div class="actions">
-            <button type="button" id="saveConfigBtn">Salvar</button>
-            <button type="button" id="clearGeminiKeyBtn" class="secondary">Limpar chave Gemini</button>
+            <button type="button" id="saveConfigBtn" data-i18n="app.modal.config.btnSave">Salvar</button>
+            <button type="button" id="clearGeminiKeyBtn" class="secondary" data-i18n="app.modal.config.btnClearGemini">Limpar chave Gemini</button>
           </div>
         </div>
       </div>
 
       <div id="sessionDetailsTemplate">
         <div class="stack">
-          <div id="sessionDetailsUser" class="hint">Carregando...</div>
+          <div id="sessionDetailsUser" class="hint" data-i18n="app.modal.sessionDetails.loading">Carregando...</div>
 
           <div class="card" style="padding: 0;">
             <div class="card-heading" style="padding: 14px 16px 10px;">
-              <h3 style="font-size: 13px; font-weight: 600;">Editar perfil</h3>
+              <h3 style="font-size: 13px; font-weight: 600;" data-i18n="app.modal.sessionDetails.editProfileTitle">Editar perfil</h3>
             </div>
             <div style="padding: 0 16px 14px;">
               <div class="grid two">
-                <label>Username <input type="text" id="editProfileUsername" autocomplete="username" /></label>
-                <label>Avatar URL <input type="url" id="editProfileAvatarUrl" placeholder="https://..." /></label>
+                <label>
+                  <span data-i18n="app.modal.sessionDetails.usernameLabel">Username</span>
+                  <input type="text" id="editProfileUsername" autocomplete="username" />
+                </label>
+                <label>
+                  <span data-i18n="app.modal.sessionDetails.avatarUrlLabel">Avatar URL</span>
+                  <input type="url" id="editProfileAvatarUrl" placeholder="https://..." />
+                </label>
               </div>
               <div class="actions" style="margin-top: 10px;">
-                <button type="button" id="updateProfileBtn" class="secondary">Salvar perfil</button>
+                <button type="button" id="updateProfileBtn" class="secondary" data-i18n="app.modal.sessionDetails.btnSaveProfile">Salvar perfil</button>
               </div>
               <div id="updateProfileResult" style="margin-top: 8px; font-size: 12px;"></div>
             </div>
@@ -820,15 +878,21 @@
 
           <div class="card" style="padding: 0;">
             <div class="card-heading" style="padding: 14px 16px 10px;">
-              <h3 style="font-size: 13px; font-weight: 600;">Trocar senha</h3>
+              <h3 style="font-size: 13px; font-weight: 600;" data-i18n="app.modal.sessionDetails.changePasswordTitle">Trocar senha</h3>
             </div>
             <div style="padding: 0 16px 14px;">
               <div class="grid two">
-                <label>Senha atual <input type="password" id="changePasswordCurrent" autocomplete="current-password" /></label>
-                <label>Nova senha <input type="password" id="changePasswordNew" autocomplete="new-password" /></label>
+                <label>
+                  <span data-i18n="app.modal.sessionDetails.currentPasswordLabel">Senha atual</span>
+                  <input type="password" id="changePasswordCurrent" autocomplete="current-password" />
+                </label>
+                <label>
+                  <span data-i18n="app.modal.sessionDetails.newPasswordLabel">Nova senha</span>
+                  <input type="password" id="changePasswordNew" autocomplete="new-password" />
+                </label>
               </div>
               <div class="actions" style="margin-top: 10px;">
-                <button type="button" id="changePasswordBtn">Trocar senha</button>
+                <button type="button" id="changePasswordBtn" data-i18n="app.modal.sessionDetails.btnChangePassword">Trocar senha</button>
               </div>
               <div id="changePasswordResult" style="margin-top: 8px; font-size: 12px;"></div>
             </div>
@@ -836,29 +900,30 @@
 
           <div class="card" style="padding: 0;">
             <div class="card-heading" style="padding: 14px 16px 10px;">
-              <h3 style="font-size: 13px; font-weight: 600;">Tokens</h3>
-              <button type="button" id="toggleTokensBtn" class="secondary compact-button">Mostrar</button>
+              <h3 style="font-size: 13px; font-weight: 600;" data-i18n="app.modal.sessionDetails.tokensTitle">Tokens</h3>
+              <button type="button" id="toggleTokensBtn" class="secondary compact-button" data-i18n="app.modal.sessionDetails.btnShowTokens">Mostrar</button>
             </div>
             <div id="tokenFields" hidden style="padding: 0 16px 14px;">
               <label style="margin-bottom: 10px;">
-                Access Token
-                <textarea id="accessToken" placeholder="Preenchido automaticamente." style="font-size: 11px; height: 64px;"></textarea>
+                <span data-i18n="app.modal.sessionDetails.accessTokenLabel">Access Token</span>
+                <textarea id="accessToken" data-i18n-placeholder="app.modal.sessionDetails.accessTokenPlaceholder" placeholder="Preenchido automaticamente." style="font-size: 11px; height: 64px;"></textarea>
               </label>
               <label>
-                Refresh Token
-                <textarea id="refreshToken" placeholder="Preenchido automaticamente." style="font-size: 11px; height: 64px;"></textarea>
+                <span data-i18n="app.modal.sessionDetails.refreshTokenLabel">Refresh Token</span>
+                <textarea id="refreshToken" data-i18n-placeholder="app.modal.sessionDetails.refreshTokenPlaceholder" placeholder="Preenchido automaticamente." style="font-size: 11px; height: 64px;"></textarea>
               </label>
             </div>
           </div>
           <div class="actions">
-            <button type="button" id="refreshSessionBtn" class="secondary">Renovar sessão</button>
-            <button type="button" id="logoutBtn" class="warning">Encerrar sessão</button>
+            <button type="button" id="refreshSessionBtn" class="secondary" data-i18n="app.modal.sessionDetails.btnRefresh">Renovar sessão</button>
+            <button type="button" id="logoutBtn" class="warning" data-i18n="app.modal.sessionDetails.btnLogout">Encerrar sessão</button>
           </div>
         </div>
       </div>
 
     </div>
 
+    <script src="/playground/shared-assets/api-playground-i18n.js"></script>
     <script src="/playground/assets/api-playground-core.js"></script>
     <script src="/playground/assets/api-playground-state.js"></script>
     <script src="/playground/assets/api-playground-api-client.js"></script>

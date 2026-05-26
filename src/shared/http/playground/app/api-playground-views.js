@@ -1,4 +1,8 @@
 (function initPlaygroundViews(global) {
+  function t(key, vars) {
+    return global.PlaygroundI18n?.t(key, vars) ?? key;
+  }
+
   function createPlaygroundViews(deps) {
     const {
       state,
@@ -35,7 +39,7 @@
       const chipAvatar = chip?.querySelector(".session-avatar");
 
       if (!state.currentUser) {
-        if (chipName) chipName.textContent = "Não autenticado";
+        if (chipName) chipName.textContent = t("app.session.notAuthenticated");
         if (chipAvatar) chipAvatar.textContent = "—";
         return;
       }
@@ -51,8 +55,8 @@
       elements.dashboardSelectionCount.textContent = String(count);
       elements.createQuizSelectionSummary.innerHTML =
         count > 0
-          ? `Perguntas selecionadas: <strong>${count}</strong>`
-          : "Selecione perguntas na aba Questions para montar o quiz.";
+          ? `${t("app.views.selectForQuiz")}: <strong>${count}</strong>`
+          : t("app.modal.createQuiz.selectionHint");
 
       if (elements.selectionBar) {
         elements.selectionBar.hidden = count === 0;
@@ -60,8 +64,7 @@
 
       const barText = elements.selectedQuestionsSummary;
       if (barText) {
-        barText.textContent =
-          count === 0 ? "" : `${count} pergunta${count !== 1 ? "s" : ""} selecionada${count !== 1 ? "s" : ""}`;
+        barText.textContent = count === 0 ? "" : t("app.selection.summary", { count });
       }
     }
 
@@ -70,31 +73,30 @@
       elements.dashboardQuestionCount.textContent = String(state.questions.length);
       elements.dashboardQuizCount.textContent = String(state.quizzes.length);
 
-      const currentUserLabel = state.currentUser ? summarizeUser(state.currentUser) : "sem sessao";
-      const activeQuizLabel = state.activeQuiz ? state.activeQuiz.quiz.title : "nenhum";
-      const activeFlowLabel = (tabMeta[state.activeTab] || tabMeta.dashboard).label;
+      const currentUserLabel = state.currentUser ? summarizeUser(state.currentUser) : t("app.dashboard.stateNoSession");
+      const activeQuizLabel = state.activeQuiz ? state.activeQuiz.quiz.title : t("app.dashboard.stateNone");
+      const activeMeta = tabMeta[state.activeTab] || tabMeta.dashboard;
+      const activeFlowLabel = activeMeta.labelKey
+        ? (global.PlaygroundI18n?.t(activeMeta.labelKey) ?? activeMeta.label)
+        : activeMeta.label;
 
       elements.dashboardState.innerHTML =
-        "<p><strong>Usuario:</strong> " +
+        `<p><strong>${t("app.dashboard.labelUser")}:</strong> ` +
         currentUserLabel +
-        "</p>" +
-        "<p><strong>Fluxo aberto:</strong> " +
+        `</p><p><strong>${t("app.dashboard.labelActiveFlow")}:</strong> ` +
         activeFlowLabel +
-        "</p>" +
-        "<p><strong>Quiz aberto:</strong> " +
+        `</p><p><strong>${t("app.dashboard.labelActiveQuiz")}:</strong> ` +
         activeQuizLabel +
-        "</p>" +
-        '<p><strong>Base URL:</strong> <span class="inline-code">' +
+        `</p><p><strong>${t("app.dashboard.labelBaseUrl")}:</strong> <span class="inline-code">` +
         normalizeBaseUrl() +
-        "</span></p>" +
-        "<p><strong>Historico de requests:</strong> " +
+        `</span></p><p><strong>${t("app.dashboard.labelHistory")}:</strong> ` +
         state.history.length +
         "</p>";
     }
 
     function renderLatestResult() {
       if (!state.latestResult) {
-        elements.latestResultSummary.innerHTML = '<div class="empty">Nenhum fluxo executado ainda.</div>';
+        elements.latestResultSummary.innerHTML = `<div class="empty">${t("app.inspector.lastResultEmpty")}</div>`;
         return;
       }
 
@@ -113,7 +115,7 @@
 
     function renderHistory() {
       if (state.history.length === 0) {
-        elements.historyList.innerHTML = '<div class="empty">Nenhuma request ainda.</div>';
+        elements.historyList.innerHTML = `<div class="empty">${t("app.inspector.historyEmpty")}</div>`;
         return;
       }
 
@@ -138,7 +140,7 @@
 
     function renderQuestionList() {
       if (state.questions.length === 0) {
-        elements.questionList.innerHTML = '<div class="empty">Nenhuma pergunta carregada ainda.</div>';
+        elements.questionList.innerHTML = `<div class="empty">${t("app.questions.listEmpty")}</div>`;
         return;
       }
 
@@ -146,7 +148,7 @@
         .map((question) => {
           const checked = state.selectedQuestionIds.has(question.id) ? " checked" : "";
           const categoryText =
-            (question.categories || []).map((category) => category.name).join(", ") || "sem categorias";
+            (question.categories || []).map((category) => category.name).join(", ") || t("app.views.noCategories");
           return (
             '<article class="resource-card">' +
             '<div class="toolbar">' +
@@ -156,32 +158,27 @@
             '"' +
             checked +
             " />" +
-            "<span>Selecionar para quiz</span>" +
+            `<span>${t("app.views.selectForQuiz")}</span>` +
             "</label>" +
-            '<button type="button" class="secondary" data-open-question="' +
-            question.id +
-            '">Abrir detalhe</button>' +
+            `<button type="button" class="secondary" data-open-question="${question.id}">${t("app.views.openDetail")}</button>` +
             "</div>" +
             "<h4>" +
             formatInlineText(question.title) +
             "</h4>" +
-            '<div class="resource-meta">Difficulty: ' +
+            `<div class="resource-meta">${t("app.views.difficulty")}: ` +
             escapeHtml(question.difficulty) +
-            " | Tempo estimado: " +
+            ` | ${t("app.views.estimatedTime")}: ` +
             escapeHtml(question.estimatedTimeSeconds) +
-            "s" +
-            " | Rating: " +
+            `s | ${t("app.views.rating")}: ` +
             escapeHtml(question.avgRating) +
-            " | Categorias: " +
+            ` | ${t("app.questions.btnLoadCategories")}: ` +
             escapeHtml(categoryText) +
             "</div>" +
             '<div class="hint" style="margin-top: 10px;">' +
-            formatText(question.bodyPreview || "Sem preview") +
+            formatText(question.bodyPreview || t("app.views.noPreview")) +
             "</div>" +
             '<div class="tags">' +
-            '<span class="tag">' +
-            escapeHtml(question.id) +
-            "</span>" +
+            `<span class="tag">${escapeHtml(question.id)}</span>` +
             "</div>" +
             "</article>"
           );
@@ -191,8 +188,7 @@
 
     function renderQuestionDetail(question) {
       if (!question) {
-        elements.questionDetail.innerHTML =
-          '<div class="empty">Clique em "Abrir detalhe" em uma pergunta para inspecionar corpo e opcoes.</div>';
+        elements.questionDetail.innerHTML = `<div class="empty">${t("app.modal.questionDetail.empty")}</div>`;
         return;
       }
 
@@ -216,9 +212,9 @@
         "<h3>" +
         formatInlineText(question.title) +
         "</h3>" +
-        '<div class="resource-meta">Difficulty: ' +
+        `<div class="resource-meta">${t("app.views.difficulty")}: ` +
         escapeHtml(question.difficulty) +
-        " | Tempo estimado: " +
+        ` | ${t("app.views.estimatedTime")}: ` +
         escapeHtml(question.estimatedTimeSeconds) +
         "s</div>" +
         '<div class="hint">' +
@@ -237,7 +233,7 @@
 
     function renderQuizList() {
       if (state.quizzes.length === 0) {
-        elements.quizList.innerHTML = '<div class="empty">Nenhum quiz carregado ainda.</div>';
+        elements.quizList.innerHTML = `<div class="empty">${t("app.quizzes.listEmpty")}</div>`;
         return;
       }
 
@@ -248,29 +244,24 @@
             "<h4>" +
             formatInlineText(quiz.title) +
             "</h4>" +
-            '<div class="resource-meta">Criador: ' +
-            escapeHtml(quiz.creator ? quiz.creator.username : "desconhecido") +
-            " | Questoes: " +
+            `<div class="resource-meta">${t("app.views.creator")}: ` +
+            escapeHtml(quiz.creator ? quiz.creator.username : t("app.views.unknown")) +
+            ` | ${t("app.views.questionCount")}: ` +
             escapeHtml(quiz.questionCount) +
-            " | Duracao estimada: " +
+            ` | ${t("app.views.estimatedDuration")}: ` +
             escapeHtml(quiz.estimatedDurationSeconds) +
-            "s" +
-            " | Publico: " +
+            `s | ${t("app.views.public")}: ` +
             escapeHtml(quiz.isPublic) +
             "</div>" +
             '<div class="hint" style="margin-top: 10px;">' +
-            formatText(quiz.description || "Sem descricao") +
+            formatText(quiz.description || t("app.views.noDescription")) +
             "</div>" +
             '<div class="hint" style="margin-top: 10px;">Mix: ' +
             escapeHtml(formatDifficultyBreakdown(quiz.difficultyBreakdown)) +
             "</div>" +
             '<div class="actions" style="margin-top: 12px;">' +
-            '<button type="button" data-open-quiz="' +
-            quiz.id +
-            '">Abrir quiz</button>' +
-            '<button type="button" class="secondary" data-quiz-leaderboard="' +
-            quiz.id +
-            '">Leaderboard</button>' +
+            `<button type="button" data-open-quiz="${quiz.id}">${t("app.views.openQuiz")}</button>` +
+            `<button type="button" class="secondary" data-quiz-leaderboard="${quiz.id}">Leaderboard</button>` +
             "</div>" +
             "</article>",
         )
@@ -279,8 +270,7 @@
 
     function renderQuizRunner() {
       if (!state.activeQuiz) {
-        elements.quizRunner.innerHTML =
-          '<div class="empty">Abra um quiz da lista para responder aqui visualmente.</div>';
+        elements.quizRunner.innerHTML = `<div class="empty">${t("app.modal.quizRunner.empty")}</div>`;
         return;
       }
 
@@ -294,18 +284,10 @@
               const codeBlock = option.code ? renderCodeSnippet(option.code) : "";
               return (
                 '<label class="runner-option">' +
-                '<input type="radio" name="question-' +
-                question.id +
-                '" data-runner-question="' +
-                question.id +
-                '" value="' +
-                optionIndex +
-                '"' +
+                `<input type="radio" name="question-${question.id}" data-runner-question="${question.id}" value="${optionIndex}"` +
                 checked +
                 " />" +
-                "<div><strong>Opcao " +
-                (optionIndex + 1) +
-                ":</strong><div>" +
+                `<div><strong>${t("app.views.option")} ${optionIndex + 1}:</strong><div>` +
                 formatText(option.text) +
                 "</div>" +
                 codeBlock +
@@ -332,7 +314,7 @@
         .join("");
 
       const resultCard = state.activeQuiz.result
-        ? '<article class="card" style="margin-top: 16px;"><h2>Resultado</h2><pre>' +
+        ? `<article class="card" style="margin-top: 16px;"><h2>${t("app.views.result")}</h2><pre>` +
           JSON.stringify(state.activeQuiz.result, null, 2) +
           "</pre></article>"
         : "";
@@ -344,22 +326,21 @@
         "<h2>" +
         formatInlineText(quiz.title) +
         "</h2>" +
-        '<button type="button" id="closeActiveQuizBtn" class="secondary">Voltar para lista</button>' +
+        `<button type="button" id="closeActiveQuizBtn" class="secondary">${t("app.views.backToList")}</button>` +
         "</div>" +
         '<div class="hint">' +
-        formatText(quiz.description || "Sem descricao") +
+        formatText(quiz.description || t("app.views.noDescription")) +
         "</div>" +
         '<div class="tags" style="margin-top: 12px;">' +
-        '<span class="tag">questoes ' +
+        `<span class="tag">${t("app.views.questionCount")} ` +
         escapeHtml(quiz.questions.length) +
-        "</span>" +
-        '<span class="tag">publico ' +
+        `</span><span class="tag">${t("app.views.public")} ` +
         escapeHtml(quiz.isPublic) +
         "</span>" +
         "</div>" +
         "</article>" +
         questionCards +
-        '<div class="actions"><button type="button" id="submitQuizAttemptBtn">Enviar tentativa</button></div>' +
+        `<div class="actions"><button type="button" id="submitQuizAttemptBtn">${t("app.views.submitAttempt")}</button></div>` +
         resultCard +
         "</div>";
     }
@@ -369,7 +350,7 @@
       if (!container) return;
 
       if (!state.pendingQuestions || state.pendingQuestions.length === 0) {
-        container.innerHTML = '<div class="empty">Nenhuma pergunta pendente.</div>';
+        container.innerHTML = `<div class="empty">${t("app.admin.review.pendingQuestionsEmpty")}</div>`;
         return;
       }
 
@@ -380,22 +361,16 @@
             "<h4>" +
             formatInlineText(question.title) +
             "</h4>" +
-            '<div class="resource-meta">ID: ' +
+            `<div class="resource-meta">${t("app.views.id")}: ` +
             escapeHtml(question.id) +
-            " | Difficulty: " +
+            ` | ${t("app.views.difficulty")}: ` +
             escapeHtml(question.difficulty) +
             "</div>" +
             '<div class="actions" style="margin-top: 12px;">' +
-            '<button type="button" class="success compact-button" data-approve-question="' +
-            question.id +
-            '">Aprovar</button>' +
+            `<button type="button" class="success compact-button" data-approve-question="${question.id}">${t("app.views.approve")}</button>` +
             '<div style="display: flex; gap: 8px;">' +
-            '<input type="text" placeholder="Motivo rejeição" id="reject-reason-' +
-            question.id +
-            '" style="padding: 4px; font-size: 0.8rem; width: 150px;">' +
-            '<button type="button" class="error compact-button" data-reject-question="' +
-            question.id +
-            '">Rejeitar</button>' +
+            `<input type="text" placeholder="${t("app.views.rejectReasonPlaceholder")}" id="reject-reason-${question.id}" style="padding: 4px; font-size: 0.8rem; width: 150px;">` +
+            `<button type="button" class="error compact-button" data-reject-question="${question.id}">${t("app.views.reject")}</button>` +
             "</div>" +
             "</div>" +
             "</article>"
@@ -409,7 +384,7 @@
       if (!container) return;
 
       if (!state.pendingQuizzes || state.pendingQuizzes.length === 0) {
-        container.innerHTML = '<div class="empty">Nenhum quiz pendente.</div>';
+        container.innerHTML = `<div class="empty">${t("app.admin.review.pendingQuizzesEmpty")}</div>`;
         return;
       }
 
@@ -420,25 +395,17 @@
             "<h4>" +
             formatInlineText(quiz.title) +
             "</h4>" +
-            '<div class="resource-meta">ID: ' +
+            `<div class="resource-meta">${t("app.views.id")}: ` +
             escapeHtml(quiz.id) +
-            " | Questions: " +
+            ` | ${t("app.views.questionCount")}: ` +
             escapeHtml(quiz.questionCount) +
             "</div>" +
             '<div class="actions" style="margin-top: 12px;">' +
-            '<button type="button" class="secondary compact-button" data-view-pending-quiz="' +
-            quiz.id +
-            '">Ver detalhes</button>' +
-            '<button type="button" class="success compact-button" data-approve-quiz="' +
-            quiz.id +
-            '">Aprovar</button>' +
+            `<button type="button" class="secondary compact-button" data-view-pending-quiz="${quiz.id}">${t("app.views.viewDetails")}</button>` +
+            `<button type="button" class="success compact-button" data-approve-quiz="${quiz.id}">${t("app.views.approve")}</button>` +
             '<div style="display: flex; gap: 8px;">' +
-            '<input type="text" placeholder="Motivo rejeição" id="reject-quiz-reason-' +
-            quiz.id +
-            '" style="padding: 4px; font-size: 0.8rem; width: 150px;">' +
-            '<button type="button" class="error compact-button" data-reject-quiz="' +
-            quiz.id +
-            '">Rejeitar</button>' +
+            `<input type="text" placeholder="${t("app.views.rejectReasonPlaceholder")}" id="reject-quiz-reason-${quiz.id}" style="padding: 4px; font-size: 0.8rem; width: 150px;">` +
+            `<button type="button" class="error compact-button" data-reject-quiz="${quiz.id}">${t("app.views.reject")}</button>` +
             "</div>" +
             "</div>" +
             "</article>"
@@ -452,8 +419,7 @@
       if (!container) return;
 
       if (!quiz) {
-        container.innerHTML =
-          '<div class="empty">Selecione um quiz na lista para exibir o detalhe (incluindo as perguntas a aprovar).</div>';
+        container.innerHTML = `<div class="empty">${t("app.modal.pendingQuizDetail.empty")}</div>`;
         return;
       }
 
@@ -468,23 +434,19 @@
         "<h3>" +
         formatInlineText(quiz.title) +
         "</h3>" +
-        '<div class="resource-meta">ID: ' +
+        `<div class="resource-meta">${t("app.views.id")}: ` +
         escapeHtml(quiz.id) +
         "</div>" +
         '<div class="hint">' +
-        formatText(quiz.description || "Sem descricao") +
+        formatText(quiz.description || t("app.views.noDescription")) +
         "</div>" +
-        '<div style="margin-top: 16px;"><strong>Questões vinculadas:</strong></div>' +
+        `<div style="margin-top: 16px;"><strong>${t("app.views.linkedQuestions")}</strong></div>` +
         '<ul style="margin-top: 8px; padding-left: 20px;">' +
         questionsList +
         "</ul>" +
         '<label style="margin-top: 16px; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">' +
-        '<input type="checkbox" id="approve-quiz-questions-' +
-        quiz.id +
-        '" checked>' +
-        "Aprovar as " +
-        quiz.questions.length +
-        " questões vinculadas juntas com o quiz" +
+        `<input type="checkbox" id="approve-quiz-questions-${quiz.id}" checked>` +
+        t("app.views.approveLinkedQuestions", { count: quiz.questions.length }) +
         "</label>" +
         "</article>";
     }
@@ -501,7 +463,7 @@
       if (!container) return;
 
       if (!state.practiceQuestions || state.practiceQuestions.length === 0) {
-        container.innerHTML = '<div class="empty">Nenhum lote de prática processado ainda.</div>';
+        container.innerHTML = `<div class="empty">${t("app.practice.answerEmpty")}</div>`;
         return;
       }
 
@@ -512,14 +474,8 @@
               const codeBlock = opt.code ? renderCodeSnippet(opt.code) : "";
               return (
                 '<label class="runner-option" style="cursor: pointer;">' +
-                '<input type="radio" name="practice-question-' +
-                question.id +
-                '" value="' +
-                optIdx +
-                '"> ' +
-                "<strong>Opcao " +
-                (optIdx + 1) +
-                ":</strong> " +
+                `<input type="radio" name="practice-question-${question.id}" value="${optIdx}"> ` +
+                `<strong>${t("app.views.option")} ${optIdx + 1}:</strong> ` +
                 formatText(opt.text) +
                 codeBlock +
                 "</label>"
@@ -529,14 +485,12 @@
 
           return (
             '<article class="runner-card" style="margin-bottom: 24px;">' +
-            "<h4>" +
-            (qIdx + 1) +
-            ". " +
+            `<h4>${qIdx + 1}. ` +
             formatInlineText(question.title) +
             "</h4>" +
-            '<div class="resource-meta" style="margin-bottom: 8px;">ID: ' +
+            `<div class="resource-meta" style="margin-bottom: 8px;">${t("app.views.id")}: ` +
             escapeHtml(question.id) +
-            " | Difficulty: " +
+            ` | ${t("app.views.difficulty")}: ` +
             escapeHtml(question.difficulty) +
             "</div>" +
             '<div class="hint" style="margin-bottom: 12px;">' +
@@ -546,9 +500,7 @@
             optionsHtml +
             "</div>" +
             '<div class="actions" style="margin-top: 16px;">' +
-            '<button type="button" class="compact-button" data-answer-practice="' +
-            question.id +
-            '">Responder</button>' +
+            `<button type="button" class="compact-button" data-answer-practice="${question.id}">${t("app.views.answer")}</button>` +
             "</div>" +
             "</article>"
           );
@@ -561,7 +513,7 @@
       if (!container) return;
 
       if (!state.categories || state.categories.length === 0) {
-        container.innerHTML = '<div class="empty">Nenhuma categoria encontrada. Clique em "Carregar lista".</div>';
+        container.innerHTML = `<div class="empty">${t("app.admin.categories.listEmpty")}</div>`;
         return;
       }
 
@@ -581,11 +533,9 @@
             '<span class="inline-code-chip">' +
             escapeHtml(cat.slug) +
             "</span>" +
-            (cat.icon ? ' <span class="tag">' + escapeHtml(cat.icon) + "</span>" : "") +
+            (cat.icon ? ` <span class="tag">${escapeHtml(cat.icon)}</span>` : "") +
             "</div>" +
-            (cat.description
-              ? '<div class="hint" style="margin-top:6px;">' + escapeHtml(cat.description) + "</div>"
-              : "") +
+            (cat.description ? `<div class="hint" style="margin-top:6px;">${escapeHtml(cat.description)}</div>` : "") +
             '<div class="actions" style="margin-top:10px;">' +
             '<button type="button" class="secondary compact-button"' +
             ' data-edit-category="' +
@@ -605,7 +555,7 @@
             '"' +
             ' data-cat-icon="' +
             escapeHtml(cat.icon || "") +
-            '">Editar</button>' +
+            `">${t("app.views.edit")}</button>` +
             "</div>" +
             "</article>"
           );
@@ -628,7 +578,7 @@
       if (!resultContainer) return;
 
       if (!state.practiceResult) {
-        resultContainer.innerHTML = '<div class="empty">Resposta não submetida ainda.</div>';
+        resultContainer.innerHTML = `<div class="empty">${t("app.practice.resultEmpty")}</div>`;
         return;
       }
 
@@ -636,24 +586,23 @@
 
       let html = '<div class="stack">';
       if (r.alreadyAnswered) {
-        html +=
-          '<div class="status" style="margin-bottom: 8px;">Aviso: Você já havia respondido esta pergunta anteriormente.</div>';
+        html += `<div class="status" style="margin-bottom: 8px;">${t("app.practice.alreadyAnswered")}</div>`;
       }
 
       if (r.isCorrect) {
-        html += `<h3 style="color: var(--success); margin: 0;">Correto (+ ${r.xpGained} XP)</h3>`;
+        html += `<h3 style="color: var(--success); margin: 0;">${t("app.practice.correct")} (+ ${r.xpGained} XP)</h3>`;
       } else {
-        html += '<h3 style="color: var(--error); margin: 0;">Incorreto (0 XP)</h3>';
+        html += `<h3 style="color: var(--error); margin: 0;">${t("app.practice.incorrect")} (0 XP)</h3>`;
       }
 
       html +=
-        '<div style="margin-top: 12px;"><strong>A opção correta era a de índice:</strong> ' +
+        `<div style="margin-top: 12px;"><strong>${t("app.practice.correctOptionLabel")}</strong> ` +
         r.correctOptionIndex +
         "</div>";
 
       if (r.explanation) {
         html +=
-          '<div class="hint" style="margin-top: 12px;"><strong>Explicação:</strong><br>' +
+          `<div class="hint" style="margin-top: 12px;"><strong>${t("app.practice.explanationLabel")}</strong><br>` +
           formatText(r.explanation) +
           "</div>";
       }
@@ -666,7 +615,7 @@
       const container = document.getElementById("quizLeaderboardContent");
       if (!container) return;
       if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty">Nenhuma tentativa registrada ainda.</div>';
+        container.innerHTML = `<div class="empty">${t("app.modal.quizLeaderboard.loading")}</div>`;
         return;
       }
       container.innerHTML =
@@ -684,14 +633,14 @@
               escapeHtml(entry.user.username) +
               "</strong>" +
               '<div class="resource-meta">' +
-              "Score: " +
+              `${t("app.views.score")}: ` +
               escapeHtml(entry.score) +
               "/" +
               escapeHtml(entry.totalQuestions) +
               " (" +
               escapeHtml(Math.round((entry.score / entry.totalQuestions) * 100)) +
               "%)" +
-              (entry.timeSpentSeconds ? " · " + escapeHtml(entry.timeSpentSeconds) + "s" : "") +
+              (entry.timeSpentSeconds ? ` · ${escapeHtml(entry.timeSpentSeconds)}s` : "") +
               " · " +
               escapeHtml(new Date(entry.completedAt).toLocaleDateString("pt-BR")) +
               "</div>" +
@@ -707,7 +656,7 @@
       const container = document.getElementById("leaderboardList");
       if (!container) return;
       if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty">Nenhum usuário no ranking.</div>';
+        container.innerHTML = `<div class="empty">${t("app.dashboard.leaderboardEmpty")}</div>`;
         return;
       }
       container.innerHTML = data
@@ -722,9 +671,9 @@
             "<strong>" +
             escapeHtml(entry.username) +
             "</strong>" +
-            '<div class="resource-meta">XP: ' +
+            `<div class="resource-meta">${t("app.views.xp")}: ` +
             escapeHtml(entry.xp) +
-            " | Nível: " +
+            ` | ${t("app.views.level")}: ` +
             escapeHtml(entry.level) +
             "</div>" +
             "</div>" +
@@ -738,7 +687,7 @@
       const container = document.getElementById("uploadResult");
       if (!container) return;
       if (!data) {
-        container.innerHTML = '<div class="empty">Nenhum upload realizado.</div>';
+        container.innerHTML = `<div class="empty">${t("app.dashboard.uploadEmpty")}</div>`;
         return;
       }
       container.innerHTML =
@@ -747,12 +696,8 @@
         escapeHtml(data.key) +
         "</code></div>" +
         (data.url
-          ? '<div style="margin-top:8px;"><a href="' +
-            escapeHtml(data.url) +
-            '" target="_blank" style="font-size:12px;">Abrir URL assinada ↗</a></div>' +
-            '<img src="' +
-            escapeHtml(data.url) +
-            '" style="max-width:100%;max-height:160px;margin-top:8px;border-radius:4px;object-fit:cover;" alt="preview" />'
+          ? `<div style="margin-top:8px;"><a href="${escapeHtml(data.url)}" target="_blank" style="font-size:12px;">${t("app.views.openSignedUrl")}</a></div>` +
+            `<img src="${escapeHtml(data.url)}" style="max-width:100%;max-height:160px;margin-top:8px;border-radius:4px;object-fit:cover;" alt="preview" />`
           : "") +
         "</div>";
     }
@@ -761,17 +706,13 @@
       const container = document.getElementById("signedUrlResult");
       if (!container) return;
       if (!url) {
-        container.innerHTML = '<div class="empty">Nenhuma chave consultada.</div>';
+        container.innerHTML = `<div class="empty">${t("app.dashboard.signedUrlEmpty")}</div>`;
         return;
       }
       container.innerHTML =
         '<div class="stack">' +
-        '<a href="' +
-        escapeHtml(url) +
-        '" target="_blank" style="word-break:break-all;font-size:12px;">Abrir URL assinada ↗</a>' +
-        '<img src="' +
-        escapeHtml(url) +
-        '" style="max-width:100%;max-height:160px;margin-top:8px;border-radius:4px;object-fit:cover;" alt="preview" />' +
+        `<a href="${escapeHtml(url)}" target="_blank" style="word-break:break-all;font-size:12px;">${t("app.views.openSignedUrl")}</a>` +
+        `<img src="${escapeHtml(url)}" style="max-width:100%;max-height:160px;margin-top:8px;border-radius:4px;object-fit:cover;" alt="preview" />` +
         "</div>";
     }
 
@@ -779,11 +720,11 @@
       const container = document.getElementById("userProfileResult");
       if (!container) return;
       if (!data) {
-        container.innerHTML = '<div class="empty">Nenhum perfil carregado.</div>';
+        container.innerHTML = `<div class="empty">${t("app.dashboard.userProfileEmpty")}</div>`;
         return;
       }
       const p = data;
-      const accuracy = p.stats?.accuracy != null ? (p.stats.accuracy * 100).toFixed(1) + "%" : "—";
+      const accuracy = p.stats?.accuracy != null ? `${(p.stats.accuracy * 100).toFixed(1)}%` : "—";
       const since = p.createdAt ? new Date(p.createdAt).toLocaleDateString("pt-BR") : "—";
       container.innerHTML =
         '<article class="detail-card">' +
@@ -794,31 +735,29 @@
         "</h3>" +
         '<div class="resource-meta" style="margin-top:4px;">' +
         escapeHtml(p.role) +
-        " · desde " +
+        ` · ${t("app.views.since")} ` +
         escapeHtml(since) +
         "</div>" +
         "</div>" +
         (p.avatarUrl
-          ? '<img src="' +
-            escapeHtml(p.avatarUrl) +
-            '" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" alt="avatar" />'
+          ? `<img src="${escapeHtml(p.avatarUrl)}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" alt="avatar" />`
           : "") +
         "</div>" +
         '<div class="grid two" style="margin-top:14px;">' +
-        '<div><span class="section-title">XP</span><div class="value">' +
+        `<div><span class="section-title">${t("app.views.xp")}</span><div class="value">` +
         escapeHtml(p.xp) +
         "</div></div>" +
-        '<div><span class="section-title">Nível</span><div class="value">' +
+        `<div><span class="section-title">${t("app.views.level")}</span><div class="value">` +
         escapeHtml(p.level) +
         "</div></div>" +
-        '<div><span class="section-title">Quizzes</span><div class="value">' +
+        `<div><span class="section-title">${t("app.views.questionCount")}</span><div class="value">` +
         escapeHtml(p.stats?.quizzesAttempted ?? 0) +
         "</div></div>" +
-        '<div><span class="section-title">Precisão</span><div class="value">' +
+        `<div><span class="section-title">${t("app.views.accuracy")}</span><div class="value">` +
         accuracy +
         "</div></div>" +
         "</div>" +
-        '<div class="hint" style="margin-top:12px;font-size:11px;word-break:break-all;">ID: ' +
+        `<div class="hint" style="margin-top:12px;font-size:11px;word-break:break-all;">${t("app.views.id")}: ` +
         escapeHtml(p.id) +
         "</div>" +
         "</article>";
@@ -828,29 +767,29 @@
       const container = document.getElementById("userProfileResult");
       if (!container) return;
       if (!data || data.length === 0) {
-        container.innerHTML = '<div class="empty">Nenhum histórico encontrado.</div>';
+        container.innerHTML = `<div class="empty">${t("app.dashboard.historyEmpty")}</div>`;
         return;
       }
       container.innerHTML =
         '<div class="stack">' +
-        '<strong style="font-size:13px;">Últimas tentativas</strong>' +
+        `<strong style="font-size:13px;">${t("app.views.latestAttempts")}</strong>` +
         data
           .slice(0, 10)
           .map(
             (item) =>
               '<article class="resource-card" style="margin-top:8px;">' +
               '<h4 style="margin:0 0 4px;">' +
-              escapeHtml(item.quiz?.title ?? "Quiz removido") +
+              escapeHtml(item.quiz?.title ?? t("app.views.quizRemoved")) +
               "</h4>" +
               '<div class="resource-meta">' +
-              "Score: " +
+              `${t("app.views.score")}: ` +
               escapeHtml(item.score) +
               "/" +
               escapeHtml(item.totalQuestions) +
               " (" +
               escapeHtml(item.percentage.toFixed(0)) +
               "%)" +
-              (item.timeSpentSeconds ? " · " + escapeHtml(item.timeSpentSeconds) + "s" : "") +
+              (item.timeSpentSeconds ? ` · ${escapeHtml(item.timeSpentSeconds)}s` : "") +
               " · " +
               escapeHtml(new Date(item.completedAt).toLocaleDateString("pt-BR")) +
               "</div>" +
@@ -863,15 +802,16 @@
     function renderAdminUserList(data) {
       const container = document.getElementById("adminUserList");
       if (!container) return;
-      if (!data || data.items.length === 0) {
-        container.innerHTML = '<div class="empty">Nenhum usuário encontrado.</div>';
+      const items = Array.isArray(data) ? data : (data.items ?? []);
+      if (!items.length) {
+        container.innerHTML = `<div class="empty">${t("app.admin.users.listEmpty")}</div>`;
         return;
       }
       const roleBadge = (role) =>
         role === "admin"
-          ? '<span style="color:var(--warning);font-weight:600;">admin</span>'
+          ? `<span style="color:var(--warning);font-weight:600;">${t("common.admin")}</span>`
           : '<span style="opacity:.7;">user</span>';
-      container.innerHTML = data.items
+      container.innerHTML = items
         .map(
           (u) =>
             '<article class="resource-card" style="margin-bottom:6px;">' +
@@ -885,17 +825,15 @@
             '<div class="hint" style="font-size:11px;margin-top:2px;">' +
             escapeHtml(u.email) +
             "</div>" +
-            '<div class="hint" style="font-size:11px;">XP ' +
+            `<div class="hint" style="font-size:11px;">${t("app.views.xp")} ` +
             escapeHtml(u.xp) +
-            " · Nv " +
+            ` · ${t("app.views.level")} ` +
             escapeHtml(u.level) +
             " · " +
             escapeHtml(new Date(u.createdAt).toLocaleDateString("pt-BR")) +
             "</div>" +
             "</div>" +
-            '<button type="button" class="secondary compact-button" data-use-user-id="' +
-            escapeHtml(u.id) +
-            '" style="flex-shrink:0;white-space:nowrap;">Usar UUID</button>' +
+            `<button type="button" class="secondary compact-button" data-use-user-id="${escapeHtml(u.id)}" style="flex-shrink:0;white-space:nowrap;">${t("app.views.useUuid")}</button>` +
             "</div>" +
             "</article>",
         )

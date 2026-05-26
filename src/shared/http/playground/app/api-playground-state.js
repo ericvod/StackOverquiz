@@ -31,22 +31,32 @@
         dashboard: {
           label: "Dashboard",
           summary: "Visão rápida de dados, saúde e atalhos.",
+          labelKey: "app.nav.dashboard",
+          summaryKey: "app.workspace.dashboardSummary",
         },
         questions: {
           label: "Perguntas",
           summary: "Listar, filtrar, detalhar e criar perguntas.",
+          labelKey: "app.nav.questions",
+          summaryKey: "app.nav.questionsSub",
         },
         quizzes: {
           label: "Quizzes",
           summary: "Criar quizzes, abrir runner e enviar tentativa.",
+          labelKey: "app.nav.quizzes",
+          summaryKey: "app.nav.quizzesSub",
         },
         practice: {
           label: "Prática",
           summary: "Modo livre de responder perguntas sem quiz fixo.",
+          labelKey: "app.nav.practice",
+          summaryKey: "app.nav.practiceSub",
         },
         admin: {
           label: "Admin",
           summary: "Gerar com IA, revisar conteúdo pendente, gerenciar categorias e usuários.",
+          labelKey: "app.nav.admin",
+          summaryKey: "app.nav.adminSub",
         },
       },
     };

@@ -514,12 +514,13 @@
       const params = new URLSearchParams();
       if (search) params.set("search", search);
       if (role) params.set("role", role);
-      const qs = params.toString() ? "?" + params.toString() : "";
+      const qs = params.toString() ? `?${params.toString()}` : "";
 
       const { response, payload } = await callApi(`/admin/users${qs}`, { auth: true });
       if (response.ok && payload?.data) {
         if (typeof deps.renderAdminUserList === "function") deps.renderAdminUserList(payload.data);
-        updateLatestResult("Usuários carregados", `${payload.data.total} usuário(s) encontrado(s).`);
+        const total = payload.meta?.pagination?.total ?? payload.data.length;
+        updateLatestResult("Usuários carregados", `${total} usuário(s) encontrado(s).`);
       }
     }
 
@@ -567,8 +568,7 @@
         if (pwEl) pwEl.value = "";
         updateLatestResult("Senha resetada", `Senha ${d.generated ? "gerada" : "definida"} para o usuário ${userId}.`);
       } else if (resultEl) {
-        resultEl.innerHTML =
-          '<div class="status error">' + escapeHtml(payload?.error?.message ?? "Erro ao resetar senha.") + "</div>";
+        resultEl.innerHTML = `<div class="status error">${escapeHtml(payload?.error?.message ?? "Erro ao resetar senha.")}</div>`;
       }
     }
 

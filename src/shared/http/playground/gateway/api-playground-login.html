@@ -18,20 +18,7 @@
 
     <main class="gateway-layout">
       <section class="gateway-panel">
-        <p class="eyebrow" data-i18n="common.brandEyebrow">StackOverquiz Console Interno</p>
-        <h1 data-i18n="login.heading">Acesso administrativo ao playground</h1>
-        <p class="intro" data-i18n="login.intro">
-          Entre com uma conta admin para abrir o playground operacional. O backend valida a sessao e bloqueia acesso
-          direto ao aplicativo sem autorizacao.
-        </p>
-
-        <div class="gateway-language">
-          <label for="gatewayLanguage" data-i18n="common.languageLabel">Idioma</label>
-          <select id="gatewayLanguage" data-language-select>
-            <option value="pt-BR" data-i18n="common.languagePt">Portugues (BR)</option>
-            <option value="en" data-i18n="common.languageEn">English</option>
-          </select>
-        </div>
+        <h1 data-i18n="login.heading">Acesso administrativo</h1>
 
         <form id="gatewayLoginForm" class="gateway-form" autocomplete="on">
           <label for="gatewayEmail" data-i18n="login.emailLabel">Email</label>
@@ -62,23 +49,12 @@
         <p id="gatewayFeedback" class="feedback" role="status" aria-live="polite"></p>
 
         <div class="gateway-footer">
-          <span data-i18n="login.footerHint">Voce precisa de papel admin para continuar.</span>
-          <a href="/swagger" target="_blank" rel="noreferrer" data-i18n="common.viewApiDocs">Ver documentacao da API</a>
+          <a href="/swagger" target="_blank" rel="noreferrer" data-i18n="login.footerDocsLink">Ver documentacao da API</a>
         </div>
       </section>
-
-      <aside class="gateway-summary" aria-label="Playground highlights">
-        <h2 data-i18n="login.highlightsTitle">Visibilidade operacional</h2>
-        <ul>
-          <li data-i18n="login.highlightHealth">Monitoramento de health e metadados da API</li>
-          <li data-i18n="login.highlightAuth">Fluxos de autenticacao, moderacao e report</li>
-          <li data-i18n="login.highlightContent">Operacao de ciclo de vida de perguntas e quizzes</li>
-          <li data-i18n="login.highlightSession">Gate admin real com sessao protegida</li>
-        </ul>
-      </aside>
     </main>
 
-    <script src="/playground/login-assets/api-playground-gateway-i18n.js"></script>
+    <script src="/playground/shared-assets/api-playground-i18n.js"></script>
     <script src="/playground/login-assets/api-playground-login.js"></script>
   </body>
 </html>

@@ -4,7 +4,7 @@ const storageKeys = {
   baseUrl: "stackoverquiz.playground.baseUrl",
 };
 
-const gatewayI18n = window.PlaygroundGatewayI18n;
+const gatewayI18n = window.PlaygroundI18n;
 
 const loginForm = document.getElementById("gatewayLoginForm");
 const submitButton = document.getElementById("gatewaySubmitButton");

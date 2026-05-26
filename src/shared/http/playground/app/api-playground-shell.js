@@ -1,4 +1,8 @@
 (function initPlaygroundShell(global) {
+  function t(key) {
+    return global.PlaygroundI18n?.t(key) ?? key;
+  }
+
   function createPlaygroundShell(deps) {
     const { storageKeys, elements } = deps;
 
@@ -28,11 +32,11 @@
       localStorage.setItem(storageKeys.theme, theme);
 
       const isDark = theme === "dark";
-      elements.themeToggleBtn.textContent = isDark ? "Tema claro" : "Tema escuro";
+      elements.themeToggleBtn.textContent = isDark ? t("app.header.themeDark") : t("app.header.themeLight");
       elements.themeToggleBtn.setAttribute("aria-pressed", String(isDark));
       elements.themeToggleBtn.setAttribute(
         "aria-label",
-        isDark ? "Alternar para tema claro" : "Alternar para tema escuro",
+        isDark ? t("app.header.themeToggleToLight") : t("app.header.themeToggleToDark"),
       );
     }
 
@@ -50,7 +54,10 @@
 
       elements.sidebarToggleBtn.textContent = isCollapsed ? "›" : "‹";
       elements.sidebarToggleBtn.setAttribute("aria-expanded", String(!isCollapsed));
-      elements.sidebarToggleBtn.setAttribute("aria-label", isCollapsed ? "Expandir sidebar" : "Recolher sidebar");
+      elements.sidebarToggleBtn.setAttribute(
+        "aria-label",
+        isCollapsed ? t("app.header.sidebarExpand") : t("app.header.sidebarCollapse"),
+      );
     }
 
     function toggleSidebar() {

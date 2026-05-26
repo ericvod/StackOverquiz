@@ -3,7 +3,6 @@
   --font-ui: "Manrope", "Aptos", "Avenir Next", sans-serif;
   --font-display: "Fraunces", "Iowan Old Style", "Aptos Display", serif;
   --surface: #f4efe4;
-  --surface-panel: rgba(255, 255, 255, 0.82);
   --surface-panel-strong: rgba(255, 255, 255, 0.95);
   --ink: #13202a;
   --ink-muted: #62717d;
@@ -27,7 +26,6 @@
   :root {
     color-scheme: dark;
     --surface: #071119;
-    --surface-panel: rgba(13, 25, 36, 0.84);
     --surface-panel-strong: rgba(17, 31, 43, 0.96);
     --ink: #edf6fa;
     --ink-muted: #a6bac7;
@@ -105,11 +103,7 @@ body {
 }
 
 .gateway-layout {
-  width: min(980px, calc(100vw - 32px));
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 20px;
-  align-items: stretch;
+  width: min(420px, calc(100vw - 32px));
   animation: rise-in 360ms ease-out;
 }
 
@@ -125,92 +119,20 @@ body {
   }
 }
 
-.gateway-panel,
-.gateway-summary {
+.gateway-panel {
+  background: var(--surface-panel-strong);
   border: 1px solid var(--border);
   border-radius: 22px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(14px);
-}
-
-.gateway-panel {
-  background: var(--surface-panel-strong);
-  padding: 30px;
-}
-
-.eyebrow {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.8rem;
-  color: var(--accent);
-  font-weight: 700;
+  padding: 32px 30px;
 }
 
 h1 {
-  margin: 6px 0 10px;
+  margin: 0 0 24px;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.3rem);
+  font-size: clamp(1.6rem, 4vw, 2rem);
   letter-spacing: -0.02em;
-}
-
-.intro {
-  margin: 0 0 20px;
-  color: var(--ink-muted);
-  line-height: 1.55;
-}
-
-.gateway-language {
-  display: grid;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.gateway-language label {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.gateway-language select {
-  width: 100%;
-  appearance: none;
-  border: 1px solid var(--field-border);
-  border-radius: 12px;
-  padding: 10px 42px 10px 12px;
-  background-color: var(--field-bg);
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--field-icon) 50%),
-    linear-gradient(135deg, var(--field-icon) 50%, transparent 50%);
-  background-position:
-    calc(100% - 19px) 54%,
-    calc(100% - 13px) 54%;
-  background-size:
-    7px 7px,
-    7px 7px;
-  background-repeat: no-repeat;
-  color: var(--ink);
-  font-size: 0.95rem;
-  transition:
-    border-color 150ms ease,
-    background-color 150ms ease,
-    box-shadow 150ms ease;
-}
-
-.gateway-language select:hover {
-  border-color: var(--field-border-hover);
-  background-color: var(--field-bg-hover);
-}
-
-.gateway-language select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px var(--focus-ring);
-}
-
-.gateway-language select option {
-  background-color: var(--field-bg);
-  color: var(--ink);
 }
 
 .gateway-form {
@@ -302,11 +224,7 @@ h1 {
   margin-top: 20px;
   padding-top: 14px;
   border-top: 1px dashed var(--border);
-  color: var(--ink-muted);
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  text-align: right;
   font-size: 0.93rem;
 }
 
@@ -317,36 +235,7 @@ h1 {
   font-weight: 700;
 }
 
-.gateway-summary {
-  background: var(--surface-panel);
-  padding: 26px 24px;
-}
-
-.gateway-summary h2 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-}
-
-.gateway-summary ul {
-  margin: 16px 0 0;
-  padding: 0 0 0 18px;
-  color: var(--ink-muted);
-  line-height: 1.65;
-}
-
-.gateway-summary li + li {
-  margin-top: 8px;
-}
-
-body.gateway-forbidden .gateway-layout {
-  grid-template-columns: 1fr;
-  max-width: 640px;
-}
-
-body.gateway-forbidden .gateway-summary {
-  display: none;
-}
+/* ─── Forbidden page ─────────────────────────────────────────────────────── */
 
 .gateway-panel-danger {
   border-color: color-mix(in srgb, var(--accent-danger) 38%, transparent);
@@ -380,24 +269,9 @@ body.gateway-forbidden .gateway-summary {
   color: #f5fffd;
 }
 
-@media (max-width: 900px) {
-  .gateway-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .gateway-summary {
-    order: -1;
-  }
-}
-
-@media (max-width: 560px) {
-  .gateway-panel,
-  .gateway-summary {
+@media (max-width: 480px) {
+  .gateway-panel {
     border-radius: 16px;
-    padding: 22px 18px;
-  }
-
-  .gateway-footer {
-    flex-direction: column;
+    padding: 24px 20px;
   }
 }

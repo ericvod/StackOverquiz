@@ -21,10 +21,7 @@ const playgroundActionsJs = readFileSync(
 const playgroundEventsJs = readFileSync(new URL("./playground/app/api-playground-events.js", import.meta.url), "utf8");
 const playgroundModalJs = readFileSync(new URL("./playground/app/api-playground-modal.js", import.meta.url), "utf8");
 const playgroundJs = readFileSync(new URL("./playground/app/api-playground.js", import.meta.url), "utf8");
-const playgroundGatewayI18nJs = readFileSync(
-  new URL("./playground/gateway/api-playground-gateway-i18n.js", import.meta.url),
-  "utf8",
-);
+const playgroundI18nJs = readFileSync(new URL("./playground/shared/api-playground-i18n.js", import.meta.url), "utf8");
 const playgroundLoginHtml = readFileSync(
   new URL("./playground/gateway/api-playground-login.html", import.meta.url),
   "utf8",
@@ -127,10 +124,10 @@ export function renderApiPlaygroundJs() {
 }
 
 /**
- * Renders the shared i18n helper used by gateway pages.
+ * Renders the shared i18n module used by all playground pages.
  */
-export function renderApiPlaygroundGatewayI18nJs() {
-  return playgroundGatewayI18nJs;
+export function renderApiPlaygroundI18nJs() {
+  return playgroundI18nJs;
 }
 
 /**
